@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->trustProxies(at: '*');
+        
         // ── Daftarkan alias middleware SERVIZZ ──
         $middleware->alias([
             'servizz.auth' => \App\Http\Middleware\ServizzAuth::class,
