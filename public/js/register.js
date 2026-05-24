@@ -51,4 +51,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setupFileInput('file_skck', 'file_skck_name');
     setupFileInput('file_sertifikat', 'file_sertifikat_name');
+
+    // Form submit validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const selectedRole = document.querySelector('input[name="role"]:checked');
+            if (selectedRole && selectedRole.value === 'Mitra') {
+                const skck = document.getElementById('file_skck');
+                const sertifikat = document.getElementById('file_sertifikat');
+                
+                if (!skck.files || skck.files.length === 0) {
+                    e.preventDefault();
+                    alert('Harap unggah dokumen SKCK Anda (Wajib untuk Mitra).');
+                    return;
+                }
+                
+                if (!sertifikat.files || sertifikat.files.length === 0) {
+                    e.preventDefault();
+                    alert('Harap unggah dokumen Sertifikat Keahlian Anda (Wajib untuk Mitra).');
+                    return;
+                }
+
+                // Check file size (max 2MB per file)
+                const maxSize = 2 * 1024 * 1024;
+                if (skck.files[0].size > maxSize || sertifikat.files[0].size > maxSize) {
+                    e.preventDefault();
+                    alert('Ukuran file terlalu besar! Maksimal 2MB per file.');
+                    return;
+                }
+            }
+        });
+    }
 });

@@ -131,7 +131,7 @@
                 <!-- Dokumen Mitra (Khusus Mitra) -->
                 <div id="mitraFiles" style="display: none;">
                     <div class="input-group-custom file-upload-wrapper">
-                        <span class="file-label-title">Upload SKCK (Opsional)</span>
+                        <span class="file-label-title">Upload SKCK (Wajib untuk Mitra)</span>
                         <div class="file-upload-btn-container">
                             <label for="file_skck" class="file-upload-btn">
                                 <i class="bi bi-cloud-arrow-up"></i> Pilih File
@@ -142,7 +142,7 @@
                     </div>
                     
                     <div class="input-group-custom file-upload-wrapper">
-                        <span class="file-label-title">Upload Sertifikat Keahlian (Opsional)</span>
+                        <span class="file-label-title">Upload Sertifikat Keahlian (Wajib untuk Mitra)</span>
                         <div class="file-upload-btn-container">
                             <label for="file_sertifikat" class="file-upload-btn">
                                 <i class="bi bi-cloud-arrow-up"></i> Pilih File

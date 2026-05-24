@@ -74,8 +74,8 @@ class AuthController extends Controller
             'no_hp'    => 'required|string|max:20',
             'alamat'   => 'required|string|max:500',
             'role'     => 'required|in:Pelanggan,Mitra',
-            'file_skck' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'file_sertifikat' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_skck' => 'required_if:role,Mitra|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_sertifikat' => 'required_if:role,Mitra|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
         $skckUrl = null;
