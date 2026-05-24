@@ -109,7 +109,7 @@
     <div class="avatar-actions">
         <form action="{{ route('settings.avatar.upload') }}" method="POST" enctype="multipart/form-data" id="avatar-form">
             @csrf
-            <input type="file" name="avatar" id="avatar-upload" style="display: none;" onchange="document.getElementById('avatar-form').submit();" accept="image/*">
+            <input type="file" name="avatar" id="avatar-upload" style="display: none;" onchange="if(this.files[0].size > 4 * 1024 * 1024) { alert('Ukuran gambar terlalu besar! Vercel membatasi maksimal 4.5 MB. Harap pilih gambar yang ukurannya lebih kecil (di bawah 4 MB).'); this.value = ''; } else { document.getElementById('avatar-form').submit(); }" accept="image/*">
             <label for="avatar-upload" class="btn-upload" style="display:inline-block; margin:0; cursor:pointer;">Unggah Baru</label>
         </form>
         <form action="{{ route('settings.avatar.delete') }}" method="POST" id="form-delete-avatar">
