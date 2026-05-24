@@ -1,0 +1,182 @@
+@extends('settings.layout')
+
+@push('setting_styles')
+<style>
+    /* Avatar Section */
+    .avatar-section {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+    .avatar-circle-wrapper {
+        position: relative;
+    }
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #d6ccff 0%, #b8acf0 100%);
+        color: var(--svz-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 800;
+    }
+    .avatar-camera-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 32px;
+        height: 32px;
+        background: var(--svz-primary);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #fff;
+        cursor: pointer;
+        font-size: 14px;
+        transition: transform 0.2s;
+    }
+    .avatar-camera-btn:hover {
+        transform: scale(1.1);
+    }
+    .avatar-actions {
+        display: flex;
+        gap: 12px;
+    }
+    .btn-upload {
+        background: var(--svz-primary);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .btn-delete-avatar {
+        background: #f1f5f9;
+        color: var(--svz-txt);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    /* Form Grid */
+    .settings-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+    .form-col-full {
+        grid-column: 1 / -1;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-form-grid {
+            grid-template-columns: 1fr;
+        }
+        .avatar-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+@endpush
+
+@section('setting_content')
+{{-- Avatar Section --}}
+<div class="avatar-section">
+    <div class="avatar-circle-wrapper">
+        <div class="avatar-circle">
+            @if(!empty($user['foto_profil']))
+                <img src="{{ env('SERVIZZ_API_URL', 'http://localhost:3000') }}/uploads/avatars/{{ $user['foto_profil'] }}" alt="Avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+            @else
+                {{ strtoupper(substr($user['nama'] ?? 'U', 0, 1)) }}
+            @endif
+        </div>
+        <label for="avatar-upload" class="avatar-camera-btn">
+            <i class="bi bi-camera"></i>
+        </label>
+    </div>
+    <div class="avatar-actions">
+        <form action="{{ route('settings.avatar.upload') }}" method="POST" enctype="multipart/form-data" id="avatar-form">
+            @csrf
+            <input type="file" name="avatar" id="avatar-upload" style="display: none;" onchange="document.getElementById('avatar-form').submit();" accept="image/*">
+            <label for="avatar-upload" class="btn-upload" style="display:inline-block; margin:0; cursor:pointer;">Unggah Baru</label>
+        </form>
+        <form action="{{ route('settings.avatar.delete') }}" method="POST" id="form-delete-avatar">
+            @csrf
+            <button type="button" class="btn-delete-avatar" onclick="confirmDeleteAvatar()">Hapus avatar</button>
+        </form>
+    </div>
+</div>
+
+{{-- Form Settings --}}
+<form method="POST" action="{{ route('settings.profile.update') }}">
+    @csrf
+    <div class="settings-form-grid">
+        
+        <div class="st-form-group">
+            <label class="st-label">Nama Lengkap <span class="req">*</span></label>
+            <input type="text" name="nama" class="st-input" value="{{ old('nama', $user['nama'] ?? '') }}" required placeholder="Nama Lengkap">
+        </div>
+
+        <div class="st-form-group">
+            <label class="st-label">Email</label>
+            <input type="email" class="st-input" value="{{ $user['email'] ?? '' }}" disabled>
+        </div>
+
+        <div class="st-form-group">
+            <label class="st-label">Nomor Telepon <span class="req">*</span></label>
+            <input type="text" name="no_hp" class="st-input" value="{{ old('no_hp', $user['no_hp'] ?? '') }}" required placeholder="Contoh: 08123456789">
+        </div>
+
+        @if(session('servizz_user.role') === 'Mitra')
+        <div class="st-form-group">
+            <label class="st-label">Keahlian (Mitra)</label>
+            <input type="text" name="keahlian" class="st-input" value="{{ old('keahlian', $user['keahlian'] ?? '') }}" placeholder="Contoh: AC, Listrik, Plumbing">
+        </div>
+        @else
+        <div class="st-form-group">
+            <label class="st-label">Role</label>
+            <input type="text" class="st-input" value="{{ $user['role'] ?? 'Pelanggan' }}" disabled>
+        </div>
+        @endif
+
+        <div class="st-form-group form-col-full">
+            <label class="st-label">Alamat Domisili / Tempat Tinggal <span class="req">*</span></label>
+            <textarea name="alamat" class="st-input" required placeholder="Masukkan alamat lengkap Anda">{{ old('alamat', $user['alamat'] ?? '') }}</textarea>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn-save">Simpan Perubahan</button>
+</form>
+
+<script>
+function confirmDeleteAvatar() {
+    Swal.fire({
+        title: 'Hapus Foto Profil?',
+        text: "Apakah Anda yakin ingin menghapus foto profil ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-delete-avatar').submit();
+        }
+    })
+}
+</script>
+@endsection

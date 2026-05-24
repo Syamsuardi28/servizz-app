@@ -1,0 +1,209 @@
+/* Dashboard Specific Styles */
+.svz-dash-wrap {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Banner */
+.dash-banner {
+    background: #ece8f9; /* Light purple */
+    border-radius: 16px;
+    padding: 40px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+.dash-banner-content {
+    z-index: 2;
+}
+.dash-banner-content h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+.dash-banner-content p {
+    font-size: 16px;
+    color: #4a4a4a;
+    margin: 0;
+}
+
+.dash-banner-illustration {
+    position: absolute;
+    right: 50px;
+    bottom: -20px;
+    height: 180px;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+/* Overview section */
+.overview-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+}
+
+.svz-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+@media (max-width: 1024px) { .svz-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .svz-stats-grid { grid-template-columns: 1fr; } }
+
+.stat-card-custom {
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.stat-card-custom:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card-custom i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.stat-card-val {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.stat-card-lbl {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+/* Colors for stat cards */
+.stat-yellow { background: #f2c75a; color: #fff; }
+.stat-purple { background: #4e488d; color: #fff; }
+.stat-pink   { background: #ef6b8c; color: #fff; }
+.stat-light  { background: #cebcf5; color: #fff; }
+
+.stat-yellow i { color: #fff; }
+.stat-purple i { color: #fff; }
+.stat-pink i { color: #fff; }
+.stat-light i { color: #fff; }
+
+/* List section */
+.list-section-wrapper {
+    background: #fbfbfc;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.list-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    transition: box-shadow 0.2s ease;
+}
+.list-item:last-child {
+    margin-bottom: 0;
+}
+.list-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.list-item-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.img-bg-1 { background: #fdf5d3; color: #f2c75a; }
+.img-bg-2 { background: #e3e0fb; color: #4e488d; }
+.img-bg-3 { background: #fde4eb; color: #ef6b8c; }
+.img-bg-4 { background: #f3ebff; color: #cebcf5; }
+.img-bg-5 { background: #dff6ed; color: #20c997; }
+
+.list-item-content {
+    flex: 1;
+}
+
+.list-item-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 6px;
+    text-decoration: none;
+    display: inline-block;
+}
+.list-item-title:hover {
+    text-decoration: underline;
+}
+
+.list-item-desc {
+    font-size: 13.5px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.list-item-meta {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.list-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: 20px;
+}
+
+.status-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+.status-badge-menunggu { background: #fef3c7; color: #92400e; }
+.status-badge-dikonfirmasi { background: #dbeafe; color: #1e40af; }
+.status-badge-dikerjakan { background: #f3e8ff; color: #6b21a8; }
+.status-badge-selesai { background: #dcfce7; color: #166534; }
+.status-badge-default { background: #f1f5f9; color: #475569; }
+
+.action-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+.action-btn:hover {
+    color: #0f172a;
+}

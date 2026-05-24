@@ -1,0 +1,288 @@
+/* Layout 2 Kolom */
+.pr-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 40px;
+}
+@media (max-width: 992px) {
+    .pr-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Cards Base */
+.pr-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    position: relative;
+    margin-bottom: 24px;
+}
+.pr-card-purple {
+    background: #5a55a8;
+    color: #ffffff;
+}
+.pr-card-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+.pr-card-purple .pr-card-title {
+    color: #ffffff;
+}
+
+/* Kiri Atas: Info Profil */
+.pr-header {
+    display: flex;
+    gap: 32px;
+}
+@media (max-width: 640px) {
+    .pr-header {
+        flex-direction: column;
+    }
+}
+.pr-avatar-box {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.pr-avatar-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.pr-info-box {
+    flex: 1;
+}
+.pr-name {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 20px;
+}
+.pr-edit-btn {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    color: #6366f1;
+    font-size: 20px;
+    transition: 0.2s;
+}
+.pr-edit-btn:hover {
+    color: #4f46e5;
+}
+.pr-detail-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 14.5px;
+    margin-bottom: 12px;
+}
+.pr-detail-label {
+    color: #94a3b8;
+    width: 140px;
+    flex-shrink: 0;
+}
+.pr-detail-val {
+    color: #334155;
+    font-weight: 500;
+}
+.pr-socials {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+.pr-social-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #6366f1;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.pr-social-icon:hover {
+    background: #4f46e5;
+}
+
+/* Kiri Bawah: Timeline Pesanan */
+.pr-timeline {
+    position: relative;
+    padding-left: 32px;
+}
+.pr-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 7px;
+    width: 2px;
+    background: #5a55a8;
+}
+.pr-timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+.pr-timeline-dot {
+    position: absolute;
+    left: -32px;
+    top: 20px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #5a55a8;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #5a55a8;
+}
+.pr-timeline-content {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.pr-tl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+.pr-tl-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+.pr-tl-badge {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+}
+.badge-selesai { background: #10b981; }
+.badge-menunggu { background: #64748b; }
+.badge-proses { background: #3b82f6; }
+.badge-ditolak { background: #f43f5e; }
+
+.pr-tl-desc {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+.pr-tl-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+.pr-tl-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #d8b4e2;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    text-decoration: none;
+}
+.pr-tl-btn:hover {
+    background: #c084cf;
+    color: #fff;
+}
+
+/* Kanan Atas: Payment */
+.pr-pay-card {
+    background: #f1f5f9;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.pr-pay-label {
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+.pr-pay-logos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.pr-pay-logo-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #1e293b;
+    font-size: 14px;
+}
+.pr-pay-logo-box img {
+    max-height: 24px;
+}
+
+/* Kanan Bawah: Subscription */
+.pr-sub-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+}
+.pr-sub-list li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    color: #e2e8f0;
+}
+.pr-sub-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #fff;
+    font-weight: bold;
+}
+.pr-sub-btn {
+    display: block;
+    width: 100%;
+    background: #ffffff;
+    color: #5a55a8;
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.pr-sub-btn:hover {
+    background: #f8fafc;
+    color: #4f46e5;
+}

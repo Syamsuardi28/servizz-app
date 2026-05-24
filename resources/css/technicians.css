@@ -1,0 +1,276 @@
+/* =========================================================
+   TECHNICIANS INDEX - ATS GRID STYLE
+========================================================= */
+
+body {
+    background-color: #f8f9fc;
+    color: #1e293b;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+/* ── Top Navigation / Filters ── */
+.ats-nav-tabs {
+    display: flex;
+    gap: 32px;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 32px;
+    overflow-x: auto;
+}
+.ats-nav-tab {
+    padding: 16px 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #64748b;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.ats-nav-tab:hover {
+    color: #1e293b;
+}
+.ats-nav-tab.active {
+    color: #4f46e5;
+    border-bottom-color: #4f46e5;
+}
+
+/* Top Actions (Search / View Toggle mock) */
+.ats-top-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+}
+.ats-search-box {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: #94a3b8;
+    font-size: 14px;
+    width: 250px;
+}
+.ats-search-box input {
+    border: none;
+    outline: none;
+    width: 100%;
+    margin-left: 8px;
+    font-family: inherit;
+    color: #1e293b;
+}
+
+/* ── Grid Layout ── */
+.ats-tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* ── Technician Card ── */
+.ats-tech-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 32px 24px 24px 24px;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+.ats-tech-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+}
+
+/* Dropdown / Edit icon at top right */
+.ats-card-action {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 4px 8px;
+    color: #64748b;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.ats-card-action:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+/* The actual dropdown menu */
+.ats-card-dropdown {
+    position: absolute;
+    top: 48px;
+    right: 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+    padding: 8px 0;
+    z-index: 10;
+    width: 220px;
+    display: none;
+}
+.ats-card-dropdown form { margin: 0; padding: 0 16px; }
+.ats-card-dropdown select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    margin-bottom: 8px;
+    font-size: 13px;
+    outline: none;
+}
+.ats-card-dropdown button {
+    width: 100%;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Avatar Ring */
+.ats-avatar-wrapper {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 16px auto;
+    border-radius: 50%;
+    padding: 4px;
+    /* Simulate the partial colored ring with border colors */
+    border: 3px solid #f1f5f9;
+    position: relative;
+}
+/* Example ring colors */
+.ats-ring-cyan { border-top-color: #06b6d4; border-right-color: #06b6d4; }
+.ats-ring-orange { border-top-color: #f97316; border-left-color: #f97316; }
+.ats-ring-emerald { border-bottom-color: #10b981; border-right-color: #10b981; }
+.ats-ring-purple { border-top-color: #a855f7; border-bottom-color: #a855f7; }
+
+.ats-avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffffff;
+    overflow: hidden;
+}
+.ats-avatar-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Name */
+.ats-tech-name {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+}
+.ats-tech-status {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+.ats-status-text.green { color: #10b981; }
+.ats-status-text.orange { color: #f59e0b; }
+.ats-status-text.red { color: #ef4444; }
+
+/* Stats rows */
+.ats-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.ats-stat-row:last-of-type {
+    border-bottom: none;
+    margin-bottom: 24px;
+}
+.ats-stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ats-stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Bottom Action Button */
+.ats-action-btn {
+    margin-top: auto;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+.ats-action-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* Primary Button for Pending (Verifikasi) */
+.ats-action-btn-primary {
+    background: #4f46e5;
+    color: #ffffff;
+    border-color: #4f46e5;
+}
+.ats-action-btn-primary:hover {
+    background: #4338ca;
+    border-color: #4338ca;
+    color: #ffffff;
+}
+
+/* Empty State */
+.ats-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
+}
+.ats-empty i {
+    font-size: 40px;
+    color: #94a3b8;
+    margin-bottom: 16px;
+    display: block;
+}
+.ats-empty p {
+    font-size: 15px;
+    color: #64748b;
+}
