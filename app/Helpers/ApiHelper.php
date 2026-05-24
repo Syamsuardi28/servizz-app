@@ -70,6 +70,10 @@ class ApiHelper
             $code = $response->status();
             $data = $response->json() ?? [];
 
+            if (!$response->successful() && empty($data['message'])) {
+                $data['message'] = "API Error {$code} di {$url}. Output: " . substr($response->body(), 0, 100);
+            }
+
             return [
                 'success' => $response->successful(),
                 'code'    => $code,
@@ -80,7 +84,7 @@ class ApiHelper
             return [
                 'success' => false,
                 'code'    => 0,
-                'data'    => ['message' => 'Tidak dapat terhubung ke server API: ' . $e->getMessage()],
+                'data'    => ['message' => "Gagal menghubungi API di {$url}. Error: " . $e->getMessage()],
             ];
         }
     }
