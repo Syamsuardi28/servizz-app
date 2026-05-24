@@ -4,7 +4,7 @@
     "builds": [
         {
             "src": "/api/index.php",
-            "use": "vercel-php@0.6.1"
+            "use": "vercel-php@0.7.2"
         },
         {
             "src": "/public/**",
@@ -13,7 +13,7 @@
     ],
     "routes": [
         {
-            "src": "/(build|assets|images|uploads)/(.*)",
+            "src": "/(build|assets|images|uploads|css|js)/(.*)",
             "dest": "/public/$1/$2"
         },
         {

@@ -1,0 +1,138 @@
+{
+  "_fonts-DkuEHybc.css": {
+    "file": "assets/fonts-DkuEHybc.css",
+    "src": "_fonts-DkuEHybc.css"
+  },
+  "_instrument-sans-400-normal-D1W7dsQl.woff": {
+    "file": "assets/instrument-sans-400-normal-D1W7dsQl.woff",
+    "src": "_instrument-sans-400-normal-D1W7dsQl.woff"
+  },
+  "_instrument-sans-400-normal-DRC__1Mx.woff2": {
+    "file": "assets/instrument-sans-400-normal-DRC__1Mx.woff2",
+    "src": "_instrument-sans-400-normal-DRC__1Mx.woff2"
+  },
+  "_instrument-sans-400-normal-Q_nF8v4l.woff2": {
+    "file": "assets/instrument-sans-400-normal-Q_nF8v4l.woff2",
+    "src": "_instrument-sans-400-normal-Q_nF8v4l.woff2"
+  },
+  "_instrument-sans-400-normal-r32jotim.woff": {
+    "file": "assets/instrument-sans-400-normal-r32jotim.woff",
+    "src": "_instrument-sans-400-normal-r32jotim.woff"
+  },
+  "_instrument-sans-500-normal-CAxz3nsc.woff": {
+    "file": "assets/instrument-sans-500-normal-CAxz3nsc.woff",
+    "src": "_instrument-sans-500-normal-CAxz3nsc.woff"
+  },
+  "_instrument-sans-500-normal-CTEe1bJa.woff2": {
+    "file": "assets/instrument-sans-500-normal-CTEe1bJa.woff2",
+    "src": "_instrument-sans-500-normal-CTEe1bJa.woff2"
+  },
+  "_instrument-sans-500-normal-Dk9ku72i.woff2": {
+    "file": "assets/instrument-sans-500-normal-Dk9ku72i.woff2",
+    "src": "_instrument-sans-500-normal-Dk9ku72i.woff2"
+  },
+  "_instrument-sans-500-normal-Z6ESRlEs.woff": {
+    "file": "assets/instrument-sans-500-normal-Z6ESRlEs.woff",
+    "src": "_instrument-sans-500-normal-Z6ESRlEs.woff"
+  },
+  "_instrument-sans-600-normal-B7fBEWYG.woff2": {
+    "file": "assets/instrument-sans-600-normal-B7fBEWYG.woff2",
+    "src": "_instrument-sans-600-normal-B7fBEWYG.woff2"
+  },
+  "_instrument-sans-600-normal-B9e8oLYv.woff": {
+    "file": "assets/instrument-sans-600-normal-B9e8oLYv.woff",
+    "src": "_instrument-sans-600-normal-B9e8oLYv.woff"
+  },
+  "_instrument-sans-600-normal-BsaQcF38.woff2": {
+    "file": "assets/instrument-sans-600-normal-BsaQcF38.woff2",
+    "src": "_instrument-sans-600-normal-BsaQcF38.woff2"
+  },
+  "_instrument-sans-600-normal-DMks36a2.woff": {
+    "file": "assets/instrument-sans-600-normal-DMks36a2.woff",
+    "src": "_instrument-sans-600-normal-DMks36a2.woff"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-D5Jqj-ti.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/dashboard.css": {
+    "file": "assets/dashboard-B7Fj7pL8.css",
+    "name": "dashboard",
+    "names": [
+      "dashboard.css"
+    ],
+    "src": "resources/css/dashboard.css",
+    "isEntry": true
+  },
+  "resources/css/layout.css": {
+    "file": "assets/layout-BJS-D6V5.css",
+    "name": "layout",
+    "names": [
+      "layout.css"
+    ],
+    "src": "resources/css/layout.css",
+    "isEntry": true
+  },
+  "resources/css/order-details.css": {
+    "file": "assets/order-details-BPYC3uOL.css",
+    "name": "order-details",
+    "names": [
+      "order-details.css"
+    ],
+    "src": "resources/css/order-details.css",
+    "isEntry": true
+  },
+  "resources/css/orders.css": {
+    "file": "assets/orders-CQ2gIj6F.css",
+    "name": "orders",
+    "names": [
+      "orders.css"
+    ],
+    "src": "resources/css/orders.css",
+    "isEntry": true
+  },
+  "resources/css/servizz.css": {
+    "file": "assets/servizz-BkaHHnTg.css",
+    "name": "servizz",
+    "names": [
+      "servizz.css"
+    ],
+    "src": "resources/css/servizz.css",
+    "isEntry": true
+  },
+  "resources/css/technicians.css": {
+    "file": "assets/technicians-VNUvfptV.css",
+    "name": "technicians",
+    "names": [
+      "technicians.css"
+    ],
+    "src": "resources/css/technicians.css",
+    "isEntry": true
+  },
+  "resources/css/users.css": {
+    "file": "assets/users-CJPyprGx.css",
+    "name": "users",
+    "names": [
+      "users.css"
+    ],
+    "src": "resources/css/users.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BTS0jFUq.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/servizz.js": {
+    "file": "assets/servizz-B8wEFyW9.js",
+    "name": "servizz",
+    "src": "resources/js/servizz.js",
+    "isEntry": true
+  }
+}
