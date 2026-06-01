@@ -37,7 +37,7 @@ return [
 
     // ── SERVIZZ API ──────────────────────────────────────────────
     'servizz' => [
-        'api_url' => 'http://localhost:3000',
+        'api_url' => env('SERVIZZ_API_URL', 'http://localhost:3000'),
     ],
 
 ];
