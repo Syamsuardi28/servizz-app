@@ -20,8 +20,7 @@ class ApiHelper
      */
     public static function request(string $method, string $endpoint, array $body = [], ?string $token = null): array
     {
-        // Hardcode URL langsung untuk memastikan koneksi ke API
-        $baseUrl = 'https://servizz-api.vercel.app';
+        $baseUrl = config('services.servizz.api_url');
         
         // Validasi baseUrl
         if (empty($baseUrl)) {
@@ -113,7 +112,7 @@ class ApiHelper
 
     public static function postMultipart(string $endpoint, array $files = [], array $body = [], ?string $token = null): array
     {
-        $baseUrl = 'https://servizz-api.vercel.app';
+        $baseUrl = config('services.servizz.api_url');
         $baseUrl = rtrim($baseUrl, '/');
         $endpoint = '/' . ltrim($endpoint, '/');
         $url = $baseUrl . $endpoint;
