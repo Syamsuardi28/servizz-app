@@ -796,4 +796,26 @@
     text-decoration: underline;
 }
 
-
+/* ── Responsive Mobile Adjustments (Autolayout) ── */
+@media (max-width: 768px) {
+    .upage-wrap {
+        padding: 15px;
+    }
+    .svz-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .svz-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .svz-pill {
+        text-align: center;
+    }
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

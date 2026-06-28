@@ -489,3 +489,12 @@ body {
 .ats-btn-primary:hover {
     background: #4338ca;
 }
+
+/* ── Responsive Mobile Adjustments (Autolayout) ── */
+@media (max-width: 768px) {
+    .ord-detail-wrap { padding: 15px; }
+    .ord-detail-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .ord-detail-layout { flex-direction: column; }
+    .ord-col-left, .ord-col-right { width: 100%; border-right: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; }
+    .ats-notes-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

@@ -590,6 +590,12 @@ body {
     .ats-profile-wrap { flex-direction: column; }
     .ats-sidebar { width: 100%; border-radius: 0; border-left: none; border-right: none; }
     .ats-content { border-radius: 0; border-left: none; border-right: none; padding: 24px; }
+    
+    .svz-page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .svz-filters { flex-direction: column; align-items: stretch; width: 100%; }
+    .svz-search-box { width: 100%; }
+    .svz-btn-primary { width: 100%; justify-content: center; }
+    .tpage-wrap { padding: 15px; }
 }
 
 
