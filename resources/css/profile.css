@@ -103,16 +103,32 @@
 }
 
 @media(max-width: 768px) {
+    .ats-profile-wrap { padding: 30px 15px; }
     .ats-hero-section {
         text-align: center;
         flex-direction: column;
-        gap: 40px;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+    .ats-avatar-container {
+        width: 160px;
+        height: 160px;
+    }
+    .ats-bio-name {
+        font-size: 32px;
     }
     .ats-bio-desc {
-        margin: 0 auto 32px auto;
+        margin: 0 auto 24px auto;
+        font-size: 14px;
     }
     .ats-bio-buttons {
         justify-content: center;
+        flex-direction: column;
+        width: 100%;
+    }
+    .ats-btn {
+        width: 100%;
+        text-align: center;
     }
 }
 
