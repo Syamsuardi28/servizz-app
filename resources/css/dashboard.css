@@ -463,4 +463,19 @@ body {
 }
 .dl-dot { width: 8px; height: 8px; border-radius: 50%; }
 
+/* ── Responsive Mobile Adjustments (Autolayout) ── */
+@media (max-width: 640px) {
+    .c-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 15px;
+}
+
+
 

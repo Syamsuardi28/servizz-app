@@ -601,5 +601,33 @@ body {
             color: var(--primary);
             transform: translateX(4px);
         }
-    
 
+/* ── Responsive Mobile Adjustments (Autolayout) ── */
+@media (max-width: 768px) {
+    #svzDropdown,
+    #svzNotifDropdown,
+    #svzMsgDropdown {
+        position: fixed !important;
+        top: 70px !important;
+        right: 16px !important;
+        left: 16px !important;
+        width: auto !important;
+        max-width: none !important;
+    }
+    
+    .svz-topbar-right {
+        gap: 12px;
+    }
+    
+    .topbar-name {
+        display: none !important;
+    }
+    
+    .svz-topbar-left h1 {
+        font-size: 16px !important;
+    }
+    
+    .topbar-date {
+        display: none;
+    }
+}
