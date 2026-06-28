@@ -1,24 +1,11 @@
-:root {
-    /* Colors matching the reference image */
-    --svz-primary:    #4e488d;
-    --svz-primary-bg: #ece8f9;
-    --svz-side:       #ffffff;
-    --svz-side-w:     250px;
-    --svz-top-h:      80px;
-    --svz-bg:         #ffffff; /* Main content background is white in the image */
-    --svz-surf:       #ffffff;
-    --svz-border:     #f1f5f9;
-    --svz-txt:        #1a1a1a;
-    --svz-muted:      #94a3b8;
-    --svz-nav-txt:    #64748b;
-}
+
 
 /* ── Reset & Base ── */
 * { box-sizing: border-box; }
 body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--svz-bg);
-    color: var(--svz-txt);
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--txt);
     font-size: 14px;
     line-height: 1.6;
     margin: 0;
@@ -35,7 +22,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-left: var(--svz-side-w);
+    margin-left: var(--side-w);
     transition: margin-left 0.3s ease;
 }
 
@@ -48,15 +35,15 @@ body {
 
 /* ── Sidebar ── */
 .svz-sidebar {
-    width: var(--svz-side-w);
-    background: var(--svz-side);
+    width: var(--side-w);
+    background: var(--side-bg);
     position: fixed;
     inset: 0 0 0 0;
     z-index: 1000;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
-    border-right: 1px solid var(--svz-border);
+    border-right: 1px solid var(--border);
     padding: 20px 0;
     justify-content: space-between;
 }
@@ -73,8 +60,8 @@ body {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: var(--svz-primary-bg);
-    color: var(--svz-primary);
+    background: var(--primary-bg);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +70,7 @@ body {
 }
 
 .svz-brand-name {
-    color: var(--svz-txt);
+    color: var(--txt);
     font-weight: 800;
     font-size: 20px;
     letter-spacing: -0.5px;
@@ -100,7 +87,7 @@ body {
     align-items: center;
     justify-content: space-between;
     background: #fbfbfc;
-    border: 1px solid var(--svz-border);
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 16px;
     text-decoration: none;
@@ -117,19 +104,19 @@ body {
 }
 .btn-create-new .text span:first-child {
     font-size: 11px;
-    color: var(--svz-muted);
+    color: var(--muted);
     font-weight: 600;
 }
 .btn-create-new .text span:last-child {
     font-size: 13px;
-    color: var(--svz-txt);
+    color: var(--txt);
     font-weight: 700;
 }
 .btn-create-new .icon {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: var(--svz-primary);
+    background: var(--primary);
     color: #fff;
     display: flex;
     align-items: center;
@@ -150,7 +137,7 @@ body {
     gap: 16px;
     padding: 12px 15px;
     border-radius: 10px;
-    color: var(--svz-nav-txt);
+    color: var(--nav-txt);
     text-decoration: none;
     font-size: 14.5px;
     font-weight: 600;
@@ -159,25 +146,25 @@ body {
 }
 
 .svz-nav-item:hover {
-    color: var(--svz-txt);
+    color: var(--txt);
     background: #f8fafc;
 }
 
 .svz-nav-item.active {
-    color: var(--svz-txt);
+    color: var(--txt);
     font-weight: 800;
     background: #ffffff;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .svz-nav-item.active i {
-    color: var(--svz-primary);
+    color: var(--primary);
 }
 
 /* Nav icon base */
 .svz-nav-item i {
     font-size: 18px;
-    color: var(--svz-muted);
+    color: var(--muted);
     width: 20px;
     text-align: center;
 }
@@ -192,8 +179,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--svz-surf);
-    border: 1px solid var(--svz-border);
+    background: var(--surf);
+    border: 1px solid var(--border);
     border-radius: 20px;
     padding: 10px 14px;
     text-decoration: none;
@@ -218,7 +205,7 @@ body {
     height: 38px;
     border-radius: 50%;
     background: linear-gradient(135deg, #d6ccff 0%, #b8acf0 100%);
-    color: var(--svz-primary);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,7 +222,7 @@ body {
 .sidebar-user-text .name {
     font-size: 13.5px;
     font-weight: 700;
-    color: var(--svz-txt);
+    color: var(--txt);
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -245,7 +232,7 @@ body {
 
 .sidebar-user-text .email {
     font-size: 11px;
-    color: var(--svz-muted);
+    color: var(--muted);
     font-weight: 500;
     margin-top: 2px;
     white-space: nowrap;
@@ -255,7 +242,7 @@ body {
 }
 
 .sidebar-user-action {
-    color: var(--svz-muted);
+    color: var(--muted);
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -269,15 +256,15 @@ body {
 }
 
 .sidebar-user-widget:hover .sidebar-user-action {
-    background: var(--svz-primary-bg);
-    color: var(--svz-primary);
+    background: var(--primary-bg);
+    color: var(--primary);
     transform: translateX(4px);
 }
 
 /* ── Topbar ── */
 .svz-topbar {
-    height: var(--svz-top-h);
-    background: var(--svz-surf);
+    height: var(--topbar-h);
+    background: var(--surf);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -301,13 +288,13 @@ body {
 }
 
 .topbar-icon {
-    color: var(--svz-muted);
+    color: var(--muted);
     font-size: 18px;
     text-decoration: none;
     transition: color 0.2s;
 }
 .topbar-icon:hover {
-    color: var(--svz-txt);
+    color: var(--txt);
 }
 
 .topbar-user-wrapper {
@@ -338,7 +325,7 @@ body {
     height: 36px;
     border-radius: 8px;
     background: #d6ccff;
-    color: var(--svz-primary);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -349,14 +336,14 @@ body {
 .topbar-name {
     font-weight: 700;
     font-size: 13.5px;
-    color: var(--svz-txt);
+    color: var(--txt);
     display: flex;
     align-items: center;
     gap: 6px;
 }
 .topbar-name i {
     font-size: 10px;
-    color: var(--svz-muted);
+    color: var(--muted);
 }
 
 /* Responsive Mobile Sidebar */
@@ -365,7 +352,7 @@ body {
     background: transparent;
     border: none;
     font-size: 24px;
-    color: var(--svz-txt);
+    color: var(--txt);
     cursor: pointer;
     padding: 0;
 }
@@ -382,11 +369,11 @@ body {
 /* Page Date Info for Topbar Left (Specific to Dashboard) */
 .topbar-date {
     font-size: 12px;
-    color: var(--svz-muted);
+    color: var(--muted);
     font-weight: 500;
 }
 .topbar-date span {
-    color: var(--svz-primary);
+    color: var(--primary);
     font-weight: 600;
 }
 
@@ -421,7 +408,7 @@ body {
     top: calc(100% + 8px);
     right: 0;
     background: #fff;
-    border: 1px solid var(--svz-border);
+    border: 1px solid var(--border);
     border-radius: 14px;
     min-width: 230px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
@@ -451,7 +438,7 @@ body {
     height: 40px;
     border-radius: 10px;
     background: #d6ccff;
-    color: var(--svz-primary);
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -463,20 +450,20 @@ body {
 .user-dropdown-name {
     font-size: 13.5px;
     font-weight: 700;
-    color: var(--svz-txt);
+    color: var(--txt);
     white-space: nowrap;
 }
 
 .user-dropdown-role {
     font-size: 11.5px;
-    color: var(--svz-muted);
+    color: var(--muted);
     font-weight: 500;
     margin-top: 2px;
 }
 
 .user-dropdown-divider {
     height: 1px;
-    background: var(--svz-border);
+    background: var(--border);
     margin: 0 16px;
 }
 
@@ -491,7 +478,7 @@ body {
     font-family: inherit;
     font-size: 13.5px;
     font-weight: 600;
-    color: var(--svz-nav-txt);
+    color: var(--nav-txt);
     cursor: pointer;
     text-align: left;
     transition: background 0.15s, color 0.15s;
@@ -500,7 +487,7 @@ body {
 
 .user-dropdown-item:hover {
     background: #f8fafc;
-    color: var(--svz-txt);
+    color: var(--txt);
 }
 
 .user-dropdown-logout {
@@ -520,3 +507,99 @@ body {
 #dropdownChevron {
     transition: transform 0.2s ease;
 }
+
+/* Extracted from layouts/app.blade.php */
+
+        /* Sidebar Footer & User Widget Bypass Cache */
+        .svz-sidebar-footer {
+            padding: 0 20px;
+            margin-top: 20px;
+        }
+
+        .sidebar-user-widget {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surf);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 10px 14px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+
+        .sidebar-user-widget:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+            border-color: #e2e8f0;
+        }
+
+        .sidebar-user-widget-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--primary-bdr) 100%);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-user-text .name {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--txt);
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 90px;
+        }
+
+        .sidebar-user-text .email {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 90px;
+        }
+
+        .sidebar-user-action {
+            color: var(--muted);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .sidebar-user-widget:hover .sidebar-user-action {
+            background: var(--primary-bg);
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+    
+

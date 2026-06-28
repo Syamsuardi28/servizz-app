@@ -198,12 +198,9 @@ class OrderController extends Controller
             'service_id'    => 'required|integer',
             'tgl_kunjungan' => 'required|string',
             'catatan'       => 'nullable|string',
-            'lat'           => 'nullable|numeric',
-            'long'          => 'nullable|numeric',
+            'lat'           => 'required|numeric',
+            'long'          => 'required|numeric',
         ]);
-
-        $lat  = $request->lat ?: -6.2088;
-        $long = $request->long ?: 106.8456;
 
         $tglKunjungan = $request->tgl_kunjungan;
         if (str_contains($tglKunjungan, 'T')) {
@@ -212,8 +209,8 @@ class OrderController extends Controller
 
         $res = ApiHelper::post('/order/create', [
             'service_id'        => (int) $request->service_id,
-            'lat'               => (float) $lat,
-            'long'              => (float) $long,
+            'lat'               => (float) $request->lat,
+            'long'              => (float) $request->long,
             'tgl_kunjungan'     => $tglKunjungan,
             'catatan'           => $request->catatan ?? '',
             'metode_pembayaran' => $request->metode_pembayaran ?? 'Transfer Bank',

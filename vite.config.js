@@ -7,6 +7,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/variables.css',
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/servizz.css',
@@ -17,6 +18,11 @@ export default defineConfig({
                 'resources/css/users.css',
                 'resources/css/orders.css',
                 'resources/css/order-details.css',
+                'resources/css/help.css',
+                'resources/css/profile.css',
+                'resources/css/services.css',
+                'resources/css/settings.css',
+                'resources/css/auth.css',
             ],
             refresh: true,
             fonts: [

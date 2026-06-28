@@ -15,7 +15,7 @@ class PaymentController extends Controller
         // Panggil API Node.js untuk mendapatkan Snap Token / Redirect URL
         $res = ApiHelper::post('/payment/charge', [
             'order_id'     => $id,
-            'payment_type' => 'bank_transfer' // Secara default atau bisa disesuaikan
+            'payment_type' => $request->input('payment_type', 'bank_transfer')
         ]);
 
         if (!$res['success']) {

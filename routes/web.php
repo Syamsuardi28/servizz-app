@@ -23,29 +23,7 @@ Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 // ── Debug Route (Remove in production) ─────────────────────────────
 Route::get('/debug/api/technicians', function() {
     $response = \App\Helpers\ApiHelper::get("/technicians");
-    
-    // Dump seluruh response untuk debugging
-    echo "<pre style='background:#f5f5f5;padding:20px;font-family:monospace;'>";
-    echo "=== FULL API RESPONSE ===\n";
-    var_dump($response);
-    echo "\n=== ANALYSIS ===\n";
-    echo "Data Type: " . gettype($response['data'] ?? null) . "\n";
-    echo "Data Value: " . var_export($response['data'], true) . "\n";
-    echo "\n=== WHAT SHOULD TECHS BE ===\n";
-    if (isset($response['data']) && is_array($response['data'])) {
-        if (isset($response['data']['technicians']) && is_array($response['data']['technicians'])) {
-            echo "TECHS = response['data']['technicians']\n";
-            echo "Count: " . count($response['data']['technicians']) . "\n";
-        } elseif (count($response['data']) > 0) {
-            echo "TECHS = response['data'] (directly)\n";
-            echo "Count: " . count($response['data']) . "\n";
-        } else {
-            echo "TECHS = [] (empty)\n";
-        }
-    } else {
-        echo "ERROR: data is not an array! Type: " . gettype($response['data'] ?? null) . "\n";
-    }
-    echo "</pre>";
+    return response()->json($response);
 });
 
 Route::get('/debug/api/logs', function() {

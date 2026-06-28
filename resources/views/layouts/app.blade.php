@@ -10,7 +10,7 @@
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     {{-- Bootstrap Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -21,102 +21,9 @@
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @vite(['resources/css/app.css', 'resources/css/servizz.css', 'resources/css/layout.css', 'resources/js/servizz.js'])
+    @vite(['resources/css/variables.css', 'resources/css/app.css', 'resources/css/servizz.css', 'resources/css/layout.css', 'resources/js/servizz.js'])
     @stack('styles')
-    <style>
-        /* Sidebar Footer & User Widget Bypass Cache */
-        .svz-sidebar-footer {
-            padding: 0 20px;
-            margin-top: 20px;
-        }
-
-        .sidebar-user-widget {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--svz-surf);
-            border: 1px solid var(--svz-border);
-            border-radius: 20px;
-            padding: 10px 14px;
-            text-decoration: none;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-            transition: all 0.2s;
-        }
-
-        .sidebar-user-widget:hover {
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-            border-color: #e2e8f0;
-        }
-
-        .sidebar-user-widget-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .sidebar-user-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #d6ccff 0%, #b8acf0 100%);
-            color: var(--svz-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 15px;
-            flex-shrink: 0;
-        }
-
-        .sidebar-user-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-user-text .name {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: var(--svz-txt);
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 90px;
-        }
-
-        .sidebar-user-text .email {
-            font-size: 11px;
-            color: var(--svz-muted);
-            font-weight: 500;
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 90px;
-        }
-
-        .sidebar-user-action {
-            color: var(--svz-muted);
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .sidebar-user-widget:hover .sidebar-user-action {
-            background: var(--svz-primary-bg);
-            color: var(--svz-primary);
-            transform: translateX(4px);
-        }
-    </style>
-</head>
+    </head>
 
 <body>
     <div class="svz-shell">
@@ -207,7 +114,7 @@
                         <i class="bi bi-list"></i>
                     </button>
                     <div>
-                        <h1 style="margin:0; font-size: 20px; font-weight: 800; color: var(--svz-txt);">@yield('breadcrumb', 'Dashboard')</h1>
+                        <h1 style="margin:0; font-size: 20px; font-weight: 800; color: var(--txt);">@yield('breadcrumb', 'Dashboard')</h1>
                         <div class="topbar-date">
                             <span>{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd') }}</span>, {{ \Carbon\Carbon::now()->locale('id')->isoFormat('DD MMMM Y') }}
                         </div>
@@ -220,13 +127,13 @@
                         <button type="button" class="topbar-icon" id="svzMsgBtn" onclick="svzToggleMsgDropdown()" style="background:transparent; border:none; cursor:pointer;">
                             <i class="bi bi-envelope"></i>
                         </button>
-                        <div id="svzMsgDropdown" style="display:none; position:absolute; top:calc(100% + 10px); right:-20px; background:#fff; border:1px solid #f1f5f9; border-radius:12px; width:280px; box-shadow:0 12px 35px rgba(0,0,0,0.1); z-index:99999; overflow:hidden;">
-                            <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#1e293b; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
+                        <div id="svzMsgDropdown" style="display:none; position:absolute; top:calc(100% + 10px); right:-20px; background:#fff; border:1px solid var(--border); border-radius:12px; width:280px; box-shadow:0 12px 35px rgba(0,0,0,0.1); z-index:99999; overflow:hidden;">
+                            <div style="padding:14px 16px; border-bottom:1px solid var(--border); font-weight:700; color:var(--txt); font-size:14px; display:flex; justify-content:space-between; align-items:center;">
                                 Pesan Masuk
-                                <span style="font-size:11px; font-weight:600; color:#3b82f6; cursor:pointer;">Tandai dibaca</span>
+                                <span style="font-size:11px; font-weight:600; color:var(--info); cursor:pointer;">Tandai dibaca</span>
                             </div>
-                            <div style="padding:40px 20px; text-align:center; color:#64748b; font-size:13px;">
-                                <i class="bi bi-envelope-paper" style="font-size:28px; display:block; margin-bottom:10px; color:#cbd5e1;"></i>
+                            <div style="padding:40px 20px; text-align:center; color:var(--muted); font-size:13px;">
+                                <i class="bi bi-envelope-paper" style="font-size:28px; display:block; margin-bottom:10px; color:var(--muted);"></i>
                                 Belum ada pesan baru untuk Anda.
                             </div>
                         </div>
@@ -237,30 +144,30 @@
                         <button type="button" class="topbar-icon" id="svzNotifBtn" onclick="svzToggleNotifDropdown()" style="background:transparent; border:none; cursor:pointer;">
                             <i class="bi bi-bell"></i>
                             @if(($adminUnreadCount ?? 0) > 0)
-                                <span style="position:absolute; top:6px; right:8px; width:8px; height:8px; background:#ef4444; border-radius:50%; border:2px solid #fff;"></span>
+                                <span style="position:absolute; top:6px; right:8px; width:8px; height:8px; background:var(--err); border-radius:50%; border:2px solid #fff;"></span>
                             @endif
                         </button>
-                        <div id="svzNotifDropdown" style="display:none; position:absolute; top:calc(100% + 10px); right:-10px; background:#fff; border:1px solid #f1f5f9; border-radius:12px; width:320px; box-shadow:0 12px 35px rgba(0,0,0,0.1); z-index:99999; overflow:hidden;">
-                            <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#1e293b; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
+                        <div id="svzNotifDropdown" style="display:none; position:absolute; top:calc(100% + 10px); right:-10px; background:#fff; border:1px solid var(--border); border-radius:12px; width:320px; box-shadow:0 12px 35px rgba(0,0,0,0.1); z-index:99999; overflow:hidden;">
+                            <div style="padding:14px 16px; border-bottom:1px solid var(--border); font-weight:700; color:var(--txt); font-size:14px; display:flex; justify-content:space-between; align-items:center;">
                                 Notifikasi
                             </div>
                             <div style="max-height: 350px; overflow-y: auto;">
                                 @if(isset($adminNotifications) && count($adminNotifications) > 0)
                                     @foreach($adminNotifications as $notif)
-                                        <div style="padding: 12px 16px; border-bottom: 1px solid #f1f5f9; background: {{ $notif['is_read'] ? '#ffffff' : '#f8fafc' }};">
-                                            <div style="font-size: 13px; font-weight: 700; color: var(--svz-txt); margin-bottom: 4px;">{{ $notif['judul'] }}</div>
-                                            <div style="font-size: 12px; color: var(--svz-muted); margin-bottom: 8px;">{{ $notif['pesan'] }}</div>
+                                        <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); background: {{ $notif['is_read'] ? '#ffffff' : '#f8fafc' }};">
+                                            <div style="font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 4px;">{{ $notif['judul'] }}</div>
+                                            <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">{{ $notif['pesan'] }}</div>
                                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                                 <div style="font-size: 11px; color: #94a3b8;">{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}</div>
                                                 @if(!$notif['is_read'])
-                                                    <button onclick="markNotifRead({{ $notif['id_notif'] }})" style="background: none; border: none; color: var(--svz-primary); font-size: 11px; font-weight: 600; cursor: pointer; padding: 0;">Tandai dibaca</button>
+                                                    <button onclick="markNotifRead({{ $notif['id_notif'] }})" style="background: none; border: none; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; padding: 0;">Tandai dibaca</button>
                                                 @endif
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                    <div style="padding:40px 20px; text-align:center; color:#64748b; font-size:13px;">
-                                        <i class="bi bi-bell-slash" style="font-size:28px; display:block; margin-bottom:10px; color:#cbd5e1;"></i>
+                                    <div style="padding:40px 20px; text-align:center; color:var(--muted); font-size:13px;">
+                                        <i class="bi bi-bell-slash" style="font-size:28px; display:block; margin-bottom:10px; color:var(--muted);"></i>
                                         Anda belum memiliki notifikasi baru.
                                     </div>
                                 @endif
@@ -282,13 +189,13 @@
                                 padding:6px 8px; border-radius:10px;
                                 font-family:inherit; transition:background .15s;
                             "
-                            onmouseenter="this.style.background='#f1f5f9'"
+                            onmouseenter="this.style.background='var(--border)'"
                             onmouseleave="this.style.background='transparent'"
                         >
                             {{-- Avatar --}}
                             <div style="
                                 width:36px; height:36px; border-radius:8px;
-                                background:#d6ccff; color:#4e488d;
+                                background:var(--primary-bg); color:var(--primary);
                                 display:flex; align-items:center; justify-content:center;
                                 font-weight:800; font-size:13px; flex-shrink:0;
                             ">
@@ -307,7 +214,7 @@
                             style="
                                 display:none;
                                 position:absolute; top:calc(100% + 10px); right:0;
-                                background:#fff; border:1px solid #f1f5f9;
+                                background:#fff; border:1px solid var(--border);
                                 border-radius:16px; min-width:240px;
                                 box-shadow:0 12px 40px rgba(0,0,0,0.13);
                                 z-index:99999; overflow:hidden;
@@ -317,8 +224,8 @@
                             <div style="display:flex; align-items:center; gap:12px; padding:18px 18px 14px;">
                                 <div style="
                                     width:44px; height:44px; border-radius:12px;
-                                    background:linear-gradient(135deg,#d6ccff,#b8acf0);
-                                    color:#4e488d; display:flex; align-items:center;
+                                    background:linear-gradient(135deg,var(--primary-bg),var(--primary-bdr));
+                                    color:var(--primary); display:flex; align-items:center;
                                     justify-content:center; font-weight:800; font-size:16px; flex-shrink:0;
                                 ">
                                     {{ strtoupper(substr(session('servizz_user.nama', 'A'), 0, 2)) }}
@@ -334,7 +241,7 @@
                             </div>
 
                             {{-- Divider --}}
-                            <div style="height:1px; background:#f1f5f9; margin:0 18px;"></div>
+                            <div style="height:1px; background:var(--border); margin:0 18px;"></div>
 
                             {{-- Profil & Settings Links --}}
                             <div style="padding:10px 10px 0 10px;">
@@ -367,12 +274,12 @@
                                             background:transparent; border:none;
                                             border-radius:10px; cursor:pointer;
                                             font-family:inherit; font-size:13.5px;
-                                            font-weight:600; color:#ef4444;
+                                            font-weight:600; color:var(--err);
                                             transition:background .15s, color .15s;
                                             text-align:left;
                                         "
-                                        onmouseenter="this.style.background='#fef2f2'; this.style.color='#dc2626';"
-                                        onmouseleave="this.style.background='transparent'; this.style.color='#ef4444';"
+                                        onmouseenter="this.style.background='var(--err-bg)'; this.style.color='#dc2626';"
+                                        onmouseleave="this.style.background='transparent'; this.style.color='var(--err)';"
                                     >
                                         <i class="bi bi-box-arrow-right" style="font-size:17px;"></i>
                                         <span>Keluar / Logout</span>
@@ -390,12 +297,12 @@
                 {{-- Flash Messages --}}
                 @if(session('flash_message'))
                     @if(session('flash_type') === 'error')
-                        <div style="background:#fef2f2; color:#991b1b; padding:12px 20px; border-radius:10px; margin-bottom:20px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px;">
+                        <div style="background:var(--err-bg); color:var(--err); padding:12px 20px; border-radius:10px; margin-bottom:20px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px;">
                             <i class="bi bi-x-circle-fill"></i>
                             {{ session('flash_message') }}
                         </div>
                     @else
-                        <div style="background:#ecfdf5; color:#166534; padding:12px 20px; border-radius:10px; margin-bottom:20px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px;">
+                        <div style="background:var(--ok-bg); color:var(--ok); padding:12px 20px; border-radius:10px; margin-bottom:20px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px;">
                             <i class="bi bi-check-circle-fill"></i>
                             {{ session('flash_message') }}
                         </div>
@@ -403,7 +310,7 @@
                 @endif
 
                 @if($errors->any())
-                    <div style="background:#fef2f2; color:#991b1b; padding:12px 20px; border-radius:10px; margin-bottom:20px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px;">
+                    <div style="background:var(--err-bg); color:var(--err); padding:12px 20px; border-radius:10px; margin-bottom:20px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px;">
                         <i class="bi bi-x-circle-fill"></i>
                         <ul style="margin:0; padding-left:20px;">
                             @foreach($errors->all() as $error)
@@ -514,3 +421,4 @@
     @yield('scripts')
 </body>
 </html>
+

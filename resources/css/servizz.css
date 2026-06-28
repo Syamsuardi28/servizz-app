@@ -1,58 +1,14 @@
 
 
 /* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 
-/* ── CSS Variables ── */
-:root {
-    --primary:      #4e488d;
-    --primary-d:    #3b366e;
-    --primary-bg:   #ece8f9;
-    --primary-bdr:  #cebcf5;
 
-    --ok:           #059669;
-    --ok-bg:        #ecfdf5;
-    --ok-bdr:       #a7f3d0;
-
-    --err:          #dc2626;
-    --err-bg:       #fef2f2;
-    --err-bdr:      #fecaca;
-
-    --warn:         #d97706;
-    --warn-bg:      #fffbeb;
-    --warn-bdr:     #fde68a;
-
-    --info:         #0891b2;
-    --info-bg:      #ecfeff;
-    --info-bdr:     #a5f3fc;
-
-    --txt:          #111827;
-    --txt-2:        #374151;
-    --muted:        #6b7280;
-    --border:       #e5e7eb;
-    --bg:           #f3f4f6;
-    --surf:         #ffffff;
-
-    --side-bg:      #0f172a;
-    --side-active:  #2563EB;
-    --side-txt:     #94a3b8;
-    --side-hover:   rgba(255,255,255,.08);
-    --side-w:       250px;
-
-    --topbar-h:     64px;
-    --radius:       10px;
-    --radius-lg:    14px;
-    --radius-sm:    6px;
-
-    --shadow:       0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
-    --shadow-md:    0 4px 16px rgba(0,0,0,.10);
-    --shadow-lg:    0 10px 40px rgba(0,0,0,.14);
-}
 
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--txt);
     font-size: 14px;
@@ -475,7 +431,7 @@ img { max-width: 100%; }
     border-radius: var(--radius-sm);
     border: 1px solid transparent;
     cursor: pointer;
-    font: 600 13.5px 'Plus Jakarta Sans', sans-serif;
+    font: 600 13.5px 'Inter', sans-serif;
     transition: all .15s;
     white-space: nowrap;
     text-decoration: none;
@@ -485,8 +441,8 @@ img { max-width: 100%; }
 .svz-btn:hover { text-decoration: none; }
 .svz-btn:disabled { opacity: .6; cursor: not-allowed; }
 
-.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-.btn-primary:hover { background: var(--primary-d); border-color: var(--primary-d); color: #fff; }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-d); border-color: var(--accent-d); color: #fff; }
 
 .btn-outline { background: var(--surf); color: var(--txt); border-color: var(--border); }
 .btn-outline:hover { background: var(--bg); color: var(--txt); }
@@ -536,7 +492,7 @@ img { max-width: 100%; }
     padding: 9px 13px;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
-    font: 500 14px 'Plus Jakarta Sans', sans-serif;
+    font: 500 14px 'Inter', sans-serif;
     background: var(--surf);
     color: var(--txt);
     transition: border-color .15s, box-shadow .15s;
@@ -592,7 +548,7 @@ img { max-width: 100%; }
     border: 1px solid var(--border);
     background: var(--surf);
     color: var(--muted);
-    font: 600 12.5px 'Plus Jakarta Sans', sans-serif;
+    font: 600 12.5px 'Inter', sans-serif;
     cursor: pointer;
     text-decoration: none;
     transition: all .15s;
@@ -1183,7 +1139,7 @@ img { max-width: 100%; }
     align-items: center;
     justify-content: center;
     padding: 20px;
-    font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', 'Inter', sans-serif;
 }
 
 .nsoc-login-card {
@@ -1930,13 +1886,13 @@ img { max-width: 100%; }
 }
 
 .svz-btn-primary {
-    background: var(--primary);
+    background: var(--accent);
     color: white;
     border: none;
 }
 
 .svz-btn-primary:hover {
-    background: var(--primary-d);
+    background: var(--accent-d);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(37,99,235,0.3);
 }
@@ -1975,3 +1931,5 @@ img { max-width: 100%; }
         font-size: 16px;
     }
 }
+
+

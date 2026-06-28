@@ -1,65 +1,14 @@
+
+@push('styles')
+    @vite('resources/css/settings.css')
+@endpush
 @extends('settings.layout')
 
 @push('setting_styles')
-<style>
-    .verify-card {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 24px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-    .verify-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        flex-shrink: 0;
-    }
-    .verify-icon.verified {
-        background: #dcfce7;
-        color: #22c55e;
-    }
-    .verify-icon.pending {
-        background: #fef9c3;
-        color: #eab308;
-    }
-    .verify-icon.unverified {
-        background: #fee2e2;
-        color: #ef4444;
-    }
-    .verify-text h3 {
-        margin: 0 0 4px 0;
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--svz-txt);
-    }
-    .verify-text p {
-        margin: 0;
-        font-size: 13px;
-        color: var(--svz-muted);
-    }
-    .verify-status {
-        margin-left: auto;
-        font-weight: 700;
-        font-size: 13px;
-        padding: 6px 12px;
-        border-radius: 20px;
-    }
-    .verify-status.verified { background: #dcfce7; color: #166534; }
-    .verify-status.pending { background: #fef9c3; color: #854d0e; }
-    .verify-status.unverified { background: #fee2e2; color: #991b1b; }
-</style>
 @endpush
 
 @section('setting_content')
-<h2 style="font-size: 20px; font-weight: 700; color: var(--svz-txt); margin-bottom: 24px;">Status Verifikasi Akun</h2>
+<h2 style="font-size: 20px; font-weight: 700; color: var(--txt); margin-bottom: 24px;">Status Verifikasi Akun</h2>
 
 <div style="max-width: 700px;">
 

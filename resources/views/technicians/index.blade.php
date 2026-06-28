@@ -66,7 +66,7 @@
                     $ringClass  = $ringColors[crc32($t['id_tech'] ?? 'x') % count($ringColors)];
                     
                     // Assign random solid background for avatar inside
-                    $bgColors = ['#4e488d','#2563eb','#059669','#d97706','#7c3aed','#0891b2'];
+                    $bgColors = ['#185FA5','#2563eb','#059669','#d97706','#7c3aed','#0891b2'];
                     $avatarBg = $bgColors[crc32($t['nama'] ?? 'y') % count($bgColors)];
                 @endphp
                 <div class="ats-tech-card">

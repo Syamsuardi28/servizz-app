@@ -1,7 +1,7 @@
 @extends('settings.layout')
 
 @section('setting_content')
-<h2 style="font-size: 20px; font-weight: 700; color: var(--svz-txt); margin-bottom: 24px;">Ganti Kata Sandi</h2>
+<h2 style="font-size: 20px; font-weight: 700; color: var(--txt); margin-bottom: 24px;">Ganti Kata Sandi</h2>
 
 <form method="POST" action="{{ route('settings.password.update') }}">
     @csrf

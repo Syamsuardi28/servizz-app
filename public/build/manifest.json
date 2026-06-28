@@ -52,7 +52,7 @@
     "src": "_instrument-sans-600-normal-DMks36a2.woff"
   },
   "resources/css/app.css": {
-    "file": "assets/app-D5Jqj-ti.css",
+    "file": "assets/app-CEvVX2of.css",
     "name": "app",
     "names": [
       "app.css"
@@ -60,8 +60,17 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/auth.css": {
+    "file": "assets/auth-FeqZbWyd.css",
+    "name": "auth",
+    "names": [
+      "auth.css"
+    ],
+    "src": "resources/css/auth.css",
+    "isEntry": true
+  },
   "resources/css/dashboard.css": {
-    "file": "assets/dashboard-B7Fj7pL8.css",
+    "file": "assets/dashboard-BoEEOg21.css",
     "name": "dashboard",
     "names": [
       "dashboard.css"
@@ -69,8 +78,17 @@
     "src": "resources/css/dashboard.css",
     "isEntry": true
   },
+  "resources/css/help.css": {
+    "file": "assets/help-WXeUcpk9.css",
+    "name": "help",
+    "names": [
+      "help.css"
+    ],
+    "src": "resources/css/help.css",
+    "isEntry": true
+  },
   "resources/css/layout.css": {
-    "file": "assets/layout-BJS-D6V5.css",
+    "file": "assets/layout-odCkEgBZ.css",
     "name": "layout",
     "names": [
       "layout.css"
@@ -96,8 +114,26 @@
     "src": "resources/css/orders.css",
     "isEntry": true
   },
+  "resources/css/profile.css": {
+    "file": "assets/profile-lsO8dSfq.css",
+    "name": "profile",
+    "names": [
+      "profile.css"
+    ],
+    "src": "resources/css/profile.css",
+    "isEntry": true
+  },
+  "resources/css/services.css": {
+    "file": "assets/services-fgPPwbST.css",
+    "name": "services",
+    "names": [
+      "services.css"
+    ],
+    "src": "resources/css/services.css",
+    "isEntry": true
+  },
   "resources/css/servizz.css": {
-    "file": "assets/servizz-BkaHHnTg.css",
+    "file": "assets/servizz-BIwDNW0s.css",
     "name": "servizz",
     "names": [
       "servizz.css"
@@ -105,8 +141,17 @@
     "src": "resources/css/servizz.css",
     "isEntry": true
   },
+  "resources/css/settings.css": {
+    "file": "assets/settings-hkBt25a7.css",
+    "name": "settings",
+    "names": [
+      "settings.css"
+    ],
+    "src": "resources/css/settings.css",
+    "isEntry": true
+  },
   "resources/css/technicians.css": {
-    "file": "assets/technicians-VNUvfptV.css",
+    "file": "assets/technicians-Dh7pyTgn.css",
     "name": "technicians",
     "names": [
       "technicians.css"
@@ -115,7 +160,7 @@
     "isEntry": true
   },
   "resources/css/users.css": {
-    "file": "assets/users-CJPyprGx.css",
+    "file": "assets/users-C1bHeZKE.css",
     "name": "users",
     "names": [
       "users.css"
@@ -123,14 +168,23 @@
     "src": "resources/css/users.css",
     "isEntry": true
   },
+  "resources/css/variables.css": {
+    "file": "assets/variables-jr02HAsU.css",
+    "name": "variables",
+    "names": [
+      "variables.css"
+    ],
+    "src": "resources/css/variables.css",
+    "isEntry": true
+  },
   "resources/js/app.js": {
-    "file": "assets/app-BTS0jFUq.js",
+    "file": "assets/app-BcGk0Hv9.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/js/servizz.js": {
-    "file": "assets/servizz-B8wEFyW9.js",
+    "file": "assets/servizz-Bqvd-tRy.js",
     "name": "servizz",
     "src": "resources/js/servizz.js",
     "isEntry": true

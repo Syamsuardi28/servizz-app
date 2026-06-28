@@ -1,94 +1,10 @@
+
+@push('styles')
+    @vite('resources/css/settings.css')
+@endpush
 @extends('settings.layout')
 
 @push('setting_styles')
-<style>
-    /* Avatar Section */
-    .avatar-section {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-        margin-bottom: 32px;
-    }
-    .avatar-circle-wrapper {
-        position: relative;
-    }
-    .avatar-circle {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #d6ccff 0%, #b8acf0 100%);
-        color: var(--svz-primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 36px;
-        font-weight: 800;
-    }
-    .avatar-camera-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 32px;
-        height: 32px;
-        background: var(--svz-primary);
-        color: #fff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #fff;
-        cursor: pointer;
-        font-size: 14px;
-        transition: transform 0.2s;
-    }
-    .avatar-camera-btn:hover {
-        transform: scale(1.1);
-    }
-    .avatar-actions {
-        display: flex;
-        gap: 12px;
-    }
-    .btn-upload {
-        background: var(--svz-primary);
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-    }
-    .btn-delete-avatar {
-        background: #f1f5f9;
-        color: var(--svz-txt);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    /* Form Grid */
-    .settings-form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-    }
-    .form-col-full {
-        grid-column: 1 / -1;
-    }
-    
-    @media (max-width: 768px) {
-        .settings-form-grid {
-            grid-template-columns: 1fr;
-        }
-        .avatar-section {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-    }
-</style>
 @endpush
 
 @section('setting_content')
