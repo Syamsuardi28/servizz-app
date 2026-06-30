@@ -35,12 +35,14 @@
         "CACHE_DRIVER": "array",
         "CACHE_STORE": "array",
         "LOG_CHANNEL": "stderr",
+        "LOG_LEVEL": "error",
         "SESSION_DRIVER": "cookie",
         "SESSION_ENCRYPT": "false",
         "QUEUE_CONNECTION": "sync",
         "DB_CONNECTION": "sqlite",
         "DB_DATABASE": "/tmp/database.sqlite",
         "FILESYSTEM_DISK": "local",
+        "BROADCAST_CONNECTION": "log",
         "SERVIZZ_API_URL": "https://servizz-api.vercel.app"
     }
 }
