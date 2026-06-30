@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: Auth ─────────────────────────────────────────────────
