@@ -16,13 +16,13 @@ class ServiceController extends Controller
 
         $ordersRes = ApiHelper::get('/order');
         $allOrders = ApiHelper::extractData($ordersRes, 'orders', []);
-        if (empty($allOrders) && count($ordersRes['data'] ?? []) > 0 && !isset($ordersRes['data']['orders'])) {
+        if ($ordersRes['success'] && empty($allOrders) && is_array($ordersRes['data'] ?? null) && count($ordersRes['data']) > 0 && !isset($ordersRes['data']['orders'])) {
             $allOrders = $ordersRes['data'];
         }
 
         $techRes = ApiHelper::get('/technicians');
         $allTechs = ApiHelper::extractData($techRes, 'technicians', []);
-        if (empty($allTechs) && count($techRes['data'] ?? []) > 0 && !isset($techRes['data']['technicians'])) {
+        if ($techRes['success'] && empty($allTechs) && is_array($techRes['data'] ?? null) && count($techRes['data']) > 0 && !isset($techRes['data']['technicians'])) {
             $allTechs = $techRes['data'];
         }
 
