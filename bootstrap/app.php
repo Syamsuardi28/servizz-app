@@ -22,7 +22,16 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Log exception to stderr FIRST so it appears at top of Vercel logs
+        $exceptions->report(function (\Throwable $e) {
+            error_log('=== SERVIZZ EXCEPTION ===');
+            error_log('Type: ' . get_class($e));
+            error_log('Message: ' . $e->getMessage());
+            error_log('File: ' . $e->getFile() . ':' . $e->getLine());
+            error_log('Trace: ' . substr($e->getTraceAsString(), 0, 800));
+            error_log('=== END EXCEPTION ===');
+            return false; // continue to default reporting
+        });
     })->create();
 
 /*
