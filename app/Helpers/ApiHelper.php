@@ -20,29 +20,28 @@ class ApiHelper
      */
     public static function request(string $method, string $endpoint, array $body = [], ?string $token = null): array
     {
-        $baseUrl = config('services.servizz.api_url');
-        
-        // Validasi baseUrl
-        if (empty($baseUrl)) {
-            throw new \Exception('SERVIZZ_API_URL tidak dikonfigurasi');
-        }
-        
-        // Normalize URL: hapus trailing slash di baseUrl
-        $baseUrl = rtrim($baseUrl, '/');
-        
-        // Normalize endpoint: pastikan dimulai dengan slash
-        $endpoint = ltrim($endpoint, '/');
-        $endpoint = '/' . $endpoint;
-        
-        // Gabungkan URL
-        $url = $baseUrl . $endpoint;
-
-        // Ambil token dari session jika tidak diberikan
-        if ($token === null) {
-            $token = Session::get('servizz_token');
-        }
-
         try {
+            $baseUrl = config('services.servizz.api_url');
+            
+            // Validasi baseUrl
+            if (empty($baseUrl)) {
+                throw new \Exception('SERVIZZ_API_URL tidak dikonfigurasi. Pastikan Environment Variable diset di Vercel.');
+            }
+            
+            // Normalize URL: hapus trailing slash di baseUrl
+            $baseUrl = rtrim($baseUrl, '/');
+            
+            // Normalize endpoint: pastikan dimulai dengan slash
+            $endpoint = '/' . ltrim($endpoint, '/');
+            
+            // Gabungkan URL
+            $url = $baseUrl . $endpoint;
+
+            // Ambil token dari session jika tidak diberikan
+            if ($token === null) {
+                $token = Session::get('servizz_token');
+            }
+
             // Build headers
             $headers = [
                 'Content-Type' => 'application/json',
@@ -79,11 +78,11 @@ class ApiHelper
                 'data'    => $data,
             ];
         } catch (\Exception $e) {
-            Log::error('[ApiHelper] ' . $e->getMessage(), ['url' => $url]);
+            Log::error('[ApiHelper] ' . $e->getMessage(), ['url' => $url ?? $endpoint]);
             return [
                 'success' => false,
                 'code'    => 0,
-                'data'    => ['message' => "Gagal menghubungi API di {$url}. Error: " . $e->getMessage()],
+                'data'    => ['message' => "Gagal menghubungi API. Error: " . $e->getMessage()],
             ];
         }
     }
@@ -112,16 +111,19 @@ class ApiHelper
 
     public static function postMultipart(string $endpoint, array $files = [], array $body = [], ?string $token = null): array
     {
-        $baseUrl = config('services.servizz.api_url');
-        $baseUrl = rtrim($baseUrl, '/');
-        $endpoint = '/' . ltrim($endpoint, '/');
-        $url = $baseUrl . $endpoint;
-
-        if ($token === null) {
-            $token = Session::get('servizz_token');
-        }
-
         try {
+            $baseUrl = config('services.servizz.api_url');
+            if (empty($baseUrl)) {
+                throw new \Exception('SERVIZZ_API_URL tidak dikonfigurasi. Pastikan Environment Variable diset di Vercel.');
+            }
+            $baseUrl = rtrim($baseUrl, '/');
+            $endpoint = '/' . ltrim($endpoint, '/');
+            $url = $baseUrl . $endpoint;
+
+            if ($token === null) {
+                $token = Session::get('servizz_token');
+            }
+
             $httpClient = Http::timeout(30);
             
             if ($token) {
@@ -142,7 +144,7 @@ class ApiHelper
                 'data'    => $response->json() ?? [],
             ];
         } catch (\Exception $e) {
-            Log::error('[ApiHelper Multipart] ' . $e->getMessage(), ['url' => $url]);
+            Log::error('[ApiHelper Multipart] ' . $e->getMessage(), ['url' => $url ?? $endpoint]);
             return [
                 'success' => false,
                 'code'    => 0,

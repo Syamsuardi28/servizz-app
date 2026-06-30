@@ -65,7 +65,7 @@
         <div class="class-card-item bg-white dark:bg-[#161615] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3E3E3A] flex flex-col p-6 h-full transition-all duration-300 hover:shadow-md hover:border-primary-200 dark:hover:border-primary-500/30">
             <div class="mb-5 flex justify-between items-start gap-2">
                 <span class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold border {{ $c['bg'] }} {{ $c['text'] }} {{ $c['border'] }}">
-                    {{ Str::limit($s['kategori'] ?? 'Layanan', 15) }}
+                    {{ \Illuminate\Support\Str::limit($s['kategori'] ?? 'Layanan', 15) }}
                 </span>
                 
                 @if(session('servizz_user.role') !== 'Pelanggan')
