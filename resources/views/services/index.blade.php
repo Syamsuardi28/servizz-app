@@ -109,7 +109,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex -space-x-2">
                         @foreach(array_slice($svcTechs, 0, 3) as $idx => $t)
-                            <div class="w-8 h-8 rounded-full border-2 border-white dark:border-[#161615] bg-gray-100 dark:bg-[#262625] text-gray-600 dark:text-gray-300 flex items-center justify-center text-xs font-bold shadow-sm relative z-[{{ 10 - $idx }}]" title="{{ $t['nama'] }}">
+                            <div class="w-8 h-8 rounded-full border-2 border-white dark:border-[#161615] bg-gray-100 dark:bg-[#262625] text-gray-600 dark:text-gray-300 flex items-center justify-center text-xs font-bold shadow-sm relative z-[{{ 10 - $idx }}]" title="{{ $t['nama'] ?? '' }}">
                                 {{ strtoupper(substr($t['nama'] ?? 'M', 0, 1)) }}
                             </div>
                         @endforeach
