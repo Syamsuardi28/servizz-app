@@ -7,6 +7,11 @@
 @php
     $totalServices = count($services);
     $allServices = $services;
+    // Extra safety: ensure these are always arrays of arrays
+    if (!is_array($allOrders)) { $allOrders = []; }
+    if (!is_array($allTechs)) { $allTechs = []; }
+    $allOrders = array_values(array_filter($allOrders, fn($o) => is_array($o)));
+    $allTechs  = array_values(array_filter($allTechs,  fn($t) => is_array($t)));
 @endphp
 
 <!-- Header Actions -->
@@ -44,21 +49,25 @@
             $c = $colors[$index % count($colors)];
 
             $svcId = $s['id_service'] ?? 0;
-            $svcOrders = array_filter($allOrders, fn($o) => ($o['service_id'] ?? 0) == $svcId || ($o['nama_service'] ?? '') == $s['nama_service']);
+            $svcOrders = array_values(array_filter($allOrders, function($o) use ($svcId, $s) {
+                if (!is_array($o)) return false;
+                return ($o['service_id'] ?? 0) == $svcId || ($o['nama_service'] ?? '') == ($s['nama_service'] ?? '');
+            }));
             $progSelesai = 0;
             foreach($svcOrders as $so) {
-                if (($so['status_order'] ?? '') == 'Selesai') $progSelesai++;
+                if (is_array($so) && ($so['status_order'] ?? '') == 'Selesai') $progSelesai++;
             }
             $totalSvcOrders = count($svcOrders);
             $progMax = $totalSvcOrders > 0 ? $totalSvcOrders : 10;
             $progVal = $totalSvcOrders > 0 ? $progSelesai : 0;
-            $progPct = ($progVal / $progMax) * 100;
+            $progPct = $progMax > 0 ? ($progVal / $progMax) * 100 : 0;
 
-            $svcTechs = array_filter($allTechs, function($t) use ($s) {
-                $k = strtolower($t['keahlian'] ?? '');
-                $ns = strtolower($s['nama_service'] ?? '');
+            $svcTechs = array_values(array_filter($allTechs, function($t) use ($s) {
+                if (!is_array($t)) return false;
+                $k = strtolower((string)($t['keahlian'] ?? ''));
+                $ns = strtolower((string)($s['nama_service'] ?? ''));
                 return $k && $ns && (str_contains($k, $ns) || str_contains($ns, $k));
-            });
+            }));
             if (empty($svcTechs)) $svcTechs = $allTechs;
         @endphp
         

@@ -53,7 +53,7 @@ class ApiHelper
             }
 
             // Send request using Laravel HTTP client
-            $httpClient = Http::withHeaders($headers)->timeout(15);
+            $httpClient = Http::withHeaders($headers)->timeout(5);
             
             $httpMethod = strtoupper($method);
             
@@ -124,7 +124,7 @@ class ApiHelper
                 $token = Session::get('servizz_token');
             }
 
-            $httpClient = Http::timeout(30);
+            $httpClient = Http::timeout(5);
             
             if ($token) {
                 $httpClient = $httpClient->withToken($token);
