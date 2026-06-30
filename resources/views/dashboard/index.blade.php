@@ -7,13 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endpush
 
-
-@push('styles')
-    @vite('resources/css/dashboard.css')
-@endpush
-
 @section('content')
-
 @php
     $totalOrders = $stats['total_order'] ?? 0;
     $orderWait = $stats['order_menunggu'] ?? 0;
@@ -21,269 +15,252 @@
     $totalRev = $stats['total_revenue'] ?? 0;
 @endphp
 
-<div class="complex-db">
-    
-    {{-- MAIN AREA --}}
-    <div class="c-main">
+<!-- STATS GRID -->
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+    <x-card class="hover:border-blue-500/30 transition-colors cursor-pointer" onclick="window.location.href='{{ route('orders.index') }}'">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Pesanan Baru</span>
+            <div class="p-2 rounded-xl bg-blue-50 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">{{ number_format($totalOrders, 0, ',', '.') }}</div>
+        <div class="mt-4 flex items-center text-xs">
+            <x-badge variant="info"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> Hari Ini</x-badge>
+            <span class="ml-2 text-gray-400 dark:text-gray-500 font-medium">Total hari ini</span>
+        </div>
+    </x-card>
+
+    <x-card class="hover:border-amber-500/30 transition-colors cursor-pointer" onclick="window.location.href='{{ route('orders.index', ['status' => 'Menunggu']) }}'">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Menunggu</span>
+            <div class="p-2 rounded-xl bg-amber-50 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                <i data-lucide="hourglass" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">{{ number_format($orderWait, 0, ',', '.') }}</div>
+        <div class="mt-4 flex items-center text-xs">
+            <x-badge variant="warning"><i data-lucide="loader" class="w-3 h-3 mr-1 animate-spin"></i> Proses</x-badge>
+            <span class="ml-2 text-gray-400 dark:text-gray-500 font-medium">Perlu diproses</span>
+        </div>
+    </x-card>
+
+    <x-card class="hover:border-green-500/30 transition-colors cursor-pointer" onclick="window.location.href='{{ route('orders.index', ['status' => 'Selesai']) }}'">
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Selesai</span>
+            <div class="p-2 rounded-xl bg-green-50 text-green-500 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">{{ number_format($orderDone, 0, ',', '.') }}</div>
+        <div class="mt-4 flex items-center text-xs">
+            <x-badge variant="success"><i data-lucide="check-check" class="w-3 h-3 mr-1"></i> Selesai</x-badge>
+            <span class="ml-2 text-gray-400 dark:text-gray-500 font-medium">Total Riwayat</span>
+        </div>
+    </x-card>
+
+    <x-card>
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Pendapatan</span>
+            <div class="p-2 rounded-xl bg-primary-50 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-[#EDEDEC] font-heading text-xl break-all">Rp {{ number_format($totalRev, 0, ',', '.') }}</div>
+        <div class="mt-4 flex items-center text-xs">
+            <x-badge variant="primary"><i data-lucide="banknote" class="w-3 h-3 mr-1"></i> Total</x-badge>
+            <span class="ml-2 text-gray-400 dark:text-gray-500 font-medium">Seluruh Pendapatan</span>
+        </div>
+    </x-card>
+</div>
+
+<!-- CHARTS ROW -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <x-card class="lg:col-span-2 h-[400px]">
+        <x-slot name="header">
+            <h3 class="text-base font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Tren Pesanan</h3>
+            <span class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-[#262625] rounded-lg">Tahun Ini</span>
+        </x-slot>
+        <div class="flex-1 min-h-0 w-full relative">
+            <canvas id="occupancyChart"></canvas>
+        </div>
+    </x-card>
+
+    <x-card class="h-[400px]">
+        <x-slot name="header">
+            <h3 class="text-base font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Kategori Jasa</h3>
+        </x-slot>
         
-        {{-- TOP CARDS --}}
-        <div class="c-stats-grid">
-            <div class="c-stat-box">
-                <div class="cs-header">
-                    <span>Pesanan Baru</span>
-                    <i class="bi bi-cart cs-icon"></i>
-                </div>
-                <div class="cs-value">{{ number_format($totalOrders, 0, ',', '.') }}</div>
-                <div class="cs-footer">
-                    <span class="cs-badge blue" style="background:#f1f5f9; color:#475569;"><i class="bi bi-calendar-day"></i> Hari Ini</span>
-                    <span class="cs-sub">Total hari ini</span>
-                </div>
-            </div>
-            <div class="c-stat-box">
-                <div class="cs-header">
-                    <span>Menunggu</span>
-                    <i class="bi bi-hourglass-split cs-icon" style="color: #a855f7;"></i>
-                </div>
-                <div class="cs-value">{{ number_format($orderWait, 0, ',', '.') }}</div>
-                <div class="cs-footer">
-                    <span class="cs-badge purple" style="background:#f3e8ff; color:#7e22ce;"><i class="bi bi-arrow-repeat"></i> Proses</span>
-                    <span class="cs-sub">Perlu diproses</span>
-                </div>
-            </div>
-            <div class="c-stat-box">
-                <div class="cs-header">
-                    <span>Pesanan Selesai</span>
-                    <i class="bi bi-check-circle cs-icon" style="color: #ef4444;"></i>
-                </div>
-                <div class="cs-value">{{ number_format($orderDone, 0, ',', '.') }}</div>
-                <div class="cs-footer">
-                    <span class="cs-badge red" style="background:#fef2f2; color:#dc2626;"><i class="bi bi-check2-all"></i> Selesai</span>
-                    <span class="cs-sub">Total Riwayat</span>
-                </div>
-            </div>
-            <div class="c-stat-box">
-                <div class="cs-header">
-                    <span>Pendapatan</span>
-                    <i class="bi bi-wallet2 cs-icon" style="color: #3b82f6;"></i>
-                </div>
-                <div class="cs-value">Rp {{ number_format($totalRev, 0, ',', '.') }}</div>
-                <div class="cs-footer">
-                    <span class="cs-badge blue" style="background:#eff6ff; color:#1d4ed8;"><i class="bi bi-cash-stack"></i> Total</span>
-                    <span class="cs-sub">Seluruh Pendapatan</span>
-                </div>
-            </div>
+        <div class="flex justify-between items-center mb-4" id="platformLegend">
+            <!-- Injected by JS -->
         </div>
 
-        {{-- MIDDLE ROW --}}
-        <div class="c-middle-row">
-            {{-- Occupancy Chart --}}
-            <div class="c-card">
-                <div class="c-title-row">
-                    <h3 class="c-title">Tren Pesanan</h3>
-                    <div style="display:flex; gap:8px;">
-                        <button class="c-btn-dropdown">Sepanjang Waktu</button>
-                    </div>
-                </div>
-                <div style="height: 250px;">
-                    <canvas id="occupancyChart"></canvas>
-                </div>
-            </div>
-
-            {{-- Booking by platform --}}
-            <div class="c-card">
-                <div class="c-title-row">
-                    <h3 class="c-title">Kategori Layanan</h3>
-                    <i class="bi bi-three-dots"></i>
-                </div>
-                
-                <div class="dl-box" id="platformLegend">
-                    {{-- Injected JS --}}
-                </div>
-
-                <div style="height: 180px; position:relative; display:flex; justify-content:center;">
-                    <canvas id="platformChart"></canvas>
-                </div>
-            </div>
+        <div class="flex-1 min-h-0 w-full relative flex items-center justify-center">
+            <canvas id="platformChart"></canvas>
         </div>
+    </x-card>
+</div>
 
-        {{-- BOTTOM ROW --}}
-        <div class="c-bottom-row">
-            {{-- Revenue Overview --}}
-            <div class="c-card">
-                <h3 class="c-title" style="margin-bottom:16px;">Ringkasan Pendapatan</h3>
-                
-                <div class="rev-total-box">
-                    <div class="rev-label">Total pendapatan</div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                        <div class="rev-val" style="font-size:26px; font-weight:800; color:#111827; word-break:break-all;">Rp {{ number_format($totalRev, 0, ',', '.') }}</div>
-                        <button class="c-btn-dropdown">Sepanjang Waktu</button>
-                    </div>
-                </div>
-
-                <div class="rev-split">
-                    <div class="rev-split-item">
-                        <div class="rs-left">
-                            <i class="bi bi-wallet2 rs-icon"></i>
-                            <div class="rs-label">Pesanan Tunai</div>
-                        </div>
-                        <div class="rs-val">Rp {{ number_format($totalRev * 0.4, 0, ',', '.') }}</div>
-                    </div>
-                    <div class="rev-split-item">
-                        <div class="rs-left">
-                            <i class="bi bi-bank rs-icon"></i>
-                            <div class="rs-label">Transfer Bank</div>
-                        </div>
-                        <div class="rs-val">Rp {{ number_format($totalRev * 0.6, 0, ',', '.') }}</div>
-                    </div>
-                </div>
-
-                <div id="topPartnersBars">
-                    {{-- Diisi dengan bar PHP/HTML --}}
-                    @php
-                        $colors = ['#3b82f6', '#8b5cf6', '#d8b4fe', '#ef4444'];
-                        $maxRev = isset($topPartners[0]) ? $topPartners[0]['total_revenue'] : 1;
-                        if ($maxRev <= 0) $maxRev = 1;
-                    @endphp
-                    @foreach($topPartners as $index => $partner)
-                        @php
-                            $pct = ($partner['total_revenue'] / $maxRev) * 100;
-                            $col = $colors[$index % count($colors)];
-                        @endphp
-                        <div class="pb-item">
-                            <div class="pb-label" title="{{ $partner['nama'] }}">{{ $partner['nama'] }}</div>
-                            <div class="pb-bar-bg">
-                                <div class="pb-bar-fill" style="width: {{ $pct }}%; background: {{ $col }};"></div>
-                            </div>
-                            <div class="pb-pct">{{ round($pct) }}%</div>
-                        </div>
-                    @endforeach
-                </div>
+<!-- BOTTOM SECTIONS -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <!-- LEFT/MAIN -->
+    <div class="xl:col-span-2 space-y-6">
+        
+        <x-card>
+            <x-slot name="header">
+                <h3 class="text-base font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Pesanan Terbaru</h3>
+                <a href="{{ route('orders.index') }}" class="text-sm font-semibold text-primary-600 hover:text-primary-700">Lihat semua</a>
+            </x-slot>
+            
+            <div class="overflow-x-auto -mx-6 -my-6">
+                <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
+                    <thead class="bg-gray-50 dark:bg-[#1f1f1e] text-gray-500 dark:text-gray-400 font-semibold border-b border-gray-100 dark:border-[#3E3E3A] uppercase text-xs tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4">ID</th>
+                            <th class="px-6 py-4">Pelanggan</th>
+                            <th class="px-6 py-4">Waktu</th>
+                            <th class="px-6 py-4">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-[#3E3E3A]">
+                        @foreach($recentOrders as $ro)
+                        <tr class="hover:bg-gray-50/50 dark:bg-[#1f1f1e]/50 dark:hover:bg-[#262625]/50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900 dark:text-[#EDEDEC]">#{{ $ro['id_order'] }}</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($ro['nama_pelanggan']) }}&background=ffe1db&color=F53003&bold=true" class="w-8 h-8 rounded-full">
+                                    <span class="font-medium text-gray-800 dark:text-gray-200">{{ $ro['nama_pelanggan'] }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-gray-100 dark:bg-[#262625] text-gray-600 dark:text-gray-400">
+                                    {{ \Carbon\Carbon::parse($ro['tgl_kunjungan'])->locale('id')->diffForHumans() }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('orders.show', $ro['id_order']) }}" class="text-gray-400 dark:text-gray-500 hover:text-primary-600 transition-colors">
+                                    <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+        </x-card>
 
-            {{-- Reservation & New Arrival --}}
-            <div class="c-card" style="display:flex; flex-direction:column; gap:24px;">
-                
-                {{-- Bar Chart --}}
-                <div>
-                    <div class="c-title-row">
-                        <h3 class="c-title">Riwayat Pesanan</h3>
-                        <button class="c-btn-dropdown">7 Hari Terakhir <i class="bi bi-chevron-down"></i></button>
-                    </div>
-                    <div style="height: 180px;">
-                        <canvas id="reservationChart"></canvas>
-                    </div>
-                </div>
-
-                {{-- Table --}}
-                <div>
-                    <div class="c-title-row" style="margin-bottom:8px;">
-                        <h3 class="c-title">Pesanan Terbaru</h3>
-                        <a href="{{ route('orders.index') }}" style="font-size:13px; font-weight:600; color:#3b82f6; text-decoration:none;">Lihat semua</a>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table class="c-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Pelanggan</th>
-                                    <th>Waktu</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($recentOrders as $ro)
-                                <tr>
-                                    <td style="font-weight:600; color:#6b7280;">#{{ $ro['id_order'] }}</td>
-                                    <td>
-                                        <div class="td-name">
-                                            <div class="td-avatar"><img src="https://ui-avatars.com/api/?name={{ urlencode($ro['nama_pelanggan']) }}&background=e0e7ff&color=3730a3" style="width:100%; border-radius:50%;"></div>
-                                            {{ $ro['nama_pelanggan'] }}
-                                        </div>
-                                    </td>
-                                    <td class="td-time">{{ \Carbon\Carbon::parse($ro['tgl_kunjungan'])->locale('id')->diffForHumans() }}</td>
-                                    <td><a href="{{ route('orders.index') }}" style="color:#9ca3af;"><i class="bi bi-arrow-right-circle-fill" style="font-size:18px;"></i></a></td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
+        <x-card>
+            <x-slot name="header">
+                <h3 class="text-base font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Jadwal Kunjungan Mendatang</h3>
+            </x-slot>
+            
+            <div class="overflow-x-auto -mx-6 -my-6">
+                <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
+                    <thead class="bg-gray-50 dark:bg-[#1f1f1e] text-gray-500 dark:text-gray-400 font-semibold border-b border-gray-100 dark:border-[#3E3E3A] uppercase text-xs tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4">ID</th>
+                            <th class="px-6 py-4">Jadwal</th>
+                            <th class="px-6 py-4">Jasa & Pelanggan</th>
+                            <th class="px-6 py-4">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-[#3E3E3A]">
+                        @forelse($calendarBookings as $cb)
+                        <tr class="hover:bg-gray-50/50 dark:bg-[#1f1f1e]/50 dark:hover:bg-[#262625]/50 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-gray-900 dark:text-[#EDEDEC]">#{{ $cb['id_order'] }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400">
+                                    {{ \Carbon\Carbon::parse($cb['tgl_kunjungan'])->locale('id')->isoFormat('D MMM YYYY, HH:mm') }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-gray-800 dark:text-gray-200">{{ $cb['nama_service'] }}</div>
+                                <div class="text-xs mt-0.5">{{ $cb['nama_pelanggan'] }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('orders.show', $cb['id_order']) }}" class="text-gray-400 dark:text-gray-500 hover:text-primary-600 transition-colors">
+                                    <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                Tidak ada jadwal kunjungan mendatang.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        </div>
+        </x-card>
 
     </div>
 
-    {{-- RIGHT SIDEBAR --}}
-    <div class="c-sidebar">
+    <!-- RIGHT SIDEBAR -->
+    <div class="space-y-6">
         
-        {{-- Calendar Card --}}
-        <div class="c-card" style="padding:0;">
-            <div style="padding:20px;">
-                <div class="cal-header">
-                    <h3 class="c-title"><i class="bi bi-calendar-event"></i> Jadwal Kunjungan</h3>
-                    <button class="c-btn-dropdown">Bulan Ini <i class="bi bi-chevron-down"></i></button>
-                </div>
-                {{-- Dihapus: cal-tabs karena tidak relevan dengan booking Servizz --}}
-
-                <div class="cal-list" style="margin-top: 10px;">
-                    @forelse($calendarBookings as $bk)
-                    <div class="cal-item">
-                        <div class="cal-date">
-                            <div class="cd-num">{{ \Carbon\Carbon::parse($bk['tgl_kunjungan'])->format('d') }}</div>
-                            <div class="cd-day">{{ \Carbon\Carbon::parse($bk['tgl_kunjungan'])->locale('id')->format('D') }}</div>
-                        </div>
-                        <div class="cal-content">
-                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                                <div>
-                                    <div class="cc-title" style="text-transform: capitalize;">{{ $bk['nama_service'] }}</div>
-                                    <div class="cc-avatars" style="display:flex; align-items:center; gap:6px; margin-top:6px;">
-                                        <div class="cc-avatar" style="margin-left:0; border:none;"><img src="https://ui-avatars.com/api/?name={{ urlencode($bk['nama_pelanggan']) }}&background=e0e7ff&color=3730a3" style="width:100%; border-radius:50%;"></div>
-                                        <div style="font-size:11.5px; color:#6b7280; font-weight:500;">{{ $bk['nama_pelanggan'] }}</div>
-                                    </div>
-                                </div>
-                                <a href="{{ route('orders.index') }}" class="cal-more" title="Lihat detail"><i class="bi bi-arrow-right-short" style="font-size:18px;"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    <div class="cal-item">
-                        <div class="cal-content">
-                            <div class="cal-available"><i class="bi bi-plus-circle"></i> Available</div>
-                        </div>
-                    </div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-
-        {{-- Task Card --}}
-        <div class="c-card">
-            <div class="c-title-row" style="margin-bottom: 16px;">
-                <h3 class="c-title"><i class="bi bi-ui-checks"></i> Tugas Verifikasi</h3>
-                <a href="{{ route('technicians.index') }}" style="font-size:13px; font-weight:600; color:#3b82f6; text-decoration:none;">Lihat semua</a>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                @forelse($pendingTasks as $pt)
-                <div class="task-item" style="margin-bottom:0; display:flex; justify-content:space-between; align-items:center; transition: all 0.2s ease;">
+        <x-card class="bg-gradient-to-br from-primary-500 to-primary-600 text-white border-none shadow-primary-500/20">
+            <h3 class="text-sm font-bold text-white/80 font-heading mb-4">Total Pendapatan</h3>
+            <div class="text-3xl font-extrabold tracking-tight mb-6">Rp {{ number_format($totalRev, 0, ',', '.') }}</div>
+            
+            <div class="space-y-4">
+                @php
+                    $colors = ['bg-white dark:bg-[#161615]', 'bg-white/70', 'bg-white/40', 'bg-white/20'];
+                    $maxRev = isset($topPartners[0]) ? $topPartners[0]['total_revenue'] : 1;
+                    if ($maxRev <= 0) $maxRev = 1;
+                @endphp
+                @foreach($topPartners as $index => $partner)
+                    @php
+                        $pct = ($partner['total_revenue'] / $maxRev) * 100;
+                        $col = $colors[$index % count($colors)];
+                    @endphp
                     <div>
-                        <div class="task-date" style="display:flex; align-items:center; gap:4px;"><i class="bi bi-clock-history"></i> {{ \Carbon\Carbon::parse($pt['created_at'])->locale('id')->diffForHumans() }}</div>
-                        <div class="task-title">Mitra Baru: <span style="color:#3b82f6;">{{ $pt['nama'] }}</span></div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="truncate pr-2">{{ $partner['nama'] }}</span>
+                            <span>{{ round($pct) }}%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-black/20 rounded-full overflow-hidden">
+                            <div class="h-full {{ $col }} rounded-full" style="width: {{ $pct }}%"></div>
+                        </div>
                     </div>
-                    <a href="{{ route('technicians.index') }}" style="background:#eff6ff; color:#3b82f6; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; text-decoration:none; border: 1px solid #bfdbfe;">Tinjau</a>
+                @endforeach
+            </div>
+        </x-card>
+
+        <x-card>
+            <x-slot name="header">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-primary-500"></i>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Tugas Verifikasi</h3>
+                </div>
+            </x-slot>
+            
+            <div class="space-y-4">
+                @forelse($pendingTasks as $pt)
+                <div class="flex items-center justify-between p-3 rounded-xl border border-gray-100 dark:border-[#3E3E3A] hover:border-primary-100 hover:bg-primary-50/50 transition-colors">
+                    <div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mb-1">
+                            <i data-lucide="clock" class="w-3 h-3"></i>
+                            {{ \Carbon\Carbon::parse($pt['created_at'])->locale('id')->diffForHumans() }}
+                        </div>
+                        <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ $pt['nama'] }}</div>
+                    </div>
+                    <a href="{{ route('technicians.show', $pt['id_tech']) }}" class="px-3 py-1.5 text-xs font-semibold text-primary-600 bg-primary-100 rounded-lg hover:bg-primary-200 transition-colors">Tinjau</a>
                 </div>
                 @empty
-                <div style="text-align:center; padding: 32px 16px; background: #f9fafb; border-radius: 8px; border: 1px dashed #e5e7eb;">
-                    <i class="bi bi-check-circle-fill" style="font-size:36px; color:#10b981; margin-bottom:12px; display:inline-block;"></i>
-                    <div style="font-size:14px; font-weight:700; color:#111827;">Semua beres!</div>
-                    <div style="font-size:12px; color:#6b7280; margin-top:6px;">Tidak ada mitra yang menunggu verifikasi.</div>
+                <div class="text-center py-6">
+                    <div class="w-12 h-12 rounded-full bg-green-100 text-green-500 flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-[#EDEDEC]">Semua beres!</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tidak ada mitra yang menunggu verifikasi.</p>
                 </div>
                 @endforelse
             </div>
-        </div>
+        </x-card>
 
     </div>
-
 </div>
 
 @endsection
@@ -293,23 +270,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     const chartData = @json($charts ?? []);
     
-    // Config global Chart.js
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#9ca3af';
-    Chart.defaults.plugins.tooltip.backgroundColor = '#111827';
-    Chart.defaults.plugins.tooltip.padding = 10;
-    Chart.defaults.plugins.tooltip.cornerRadius = 6;
+    Chart.defaults.plugins.tooltip.backgroundColor = '#1f2937';
+    Chart.defaults.plugins.tooltip.padding = 12;
+    Chart.defaults.plugins.tooltip.cornerRadius = 8;
 
     // 1. OCCUPANCY CHART (Line with Area)
     const occCtx = document.getElementById('occupancyChart').getContext('2d');
-    
-    // Create gradient
-    let gradientFill = occCtx.createLinearGradient(0, 0, 0, 250);
-    gradientFill.addColorStop(0, 'rgba(168, 85, 247, 0.4)'); // purple-500
-    gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    let gradientFill = occCtx.createLinearGradient(0, 0, 0, 300);
+    gradientFill.addColorStop(0, 'rgba(245, 48, 3, 0.2)'); // Primary-500 with opacity
+    gradientFill.addColorStop(1, 'rgba(245, 48, 3, 0)');
 
     let oLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    let oData = [18, 18, 65, 65, 82, 82, 75]; // Mock data to match shape
+    let oData = [18, 18, 65, 65, 82, 82, 75];
     
     if (chartData.orderTrends && chartData.orderTrends.length > 0) {
         oData = [];
@@ -318,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chartData.orderTrends.forEach(r => {
             let mName = r.month >= 1 && r.month <= 12 ? monthNames[r.month - 1] : 'M' + r.month;
             oLabels.push(mName);
-            oData.push(r.total_pesanan); // data asli tanpa dikali
+            oData.push(r.total_pesanan);
         });
     }
 
@@ -329,15 +303,16 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 label: 'Pesanan',
                 data: oData,
-                borderColor: '#a855f7',
+                borderColor: '#F53003',
                 backgroundColor: gradientFill,
                 borderWidth: 2,
                 pointBackgroundColor: '#fff',
-                pointBorderColor: '#a855f7',
+                pointBorderColor: '#F53003',
                 pointBorderWidth: 2,
                 pointRadius: 4,
+                pointHoverRadius: 6,
                 fill: true,
-                tension: 0.1 // Slight curve
+                tension: 0.4 
             }]
         },
         options: {
@@ -347,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: '#f3f4f6', drawBorder: false },
+                    grid: { color: '#f3f4f6', drawBorder: false, borderDash: [4, 4] },
                     border: { display: false },
                     ticks: { precision: 0 }
                 },
@@ -355,15 +330,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     grid: { display: false },
                     border: { display: false }
                 }
-            }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
         }
     });
 
     // 2. PLATFORM CHART (Doughnut)
     const platCtx = document.getElementById('platformChart').getContext('2d');
-    let pLabels = ['direct booking', 'Booking.red.com', 'Social media', 'Air BnB', 'others'];
-    let pData = [61, 13, 6, 11, 3];
-    let pColors = ['#d8b4fe', '#93c5fd', '#bfdbfe', '#60a5fa', '#fca5a5'];
+    let pLabels = ['AC', 'Elektronik', 'Pipa', 'Kelistrikan'];
+    let pData = [45, 25, 20, 10];
+    let pColors = ['#F53003', '#ff6d51', '#ffa28e', '#ffe1db']; // Monochrome Primary
 
     if (chartData.serviceStats && chartData.serviceStats.length > 0) {
         pLabels = chartData.serviceStats.map(s => s.label);
@@ -378,9 +357,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: pData,
                 backgroundColor: pColors,
                 borderWidth: 0,
-                cutout: '65%',
-                borderRadius: 20,
-                spacing: 4
+                cutout: '75%',
+                borderRadius: 4,
+                spacing: 2
             }]
         },
         options: {
@@ -394,57 +373,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let legendHtml = '';
     let totalPData = pData.reduce((a, b) => a + Number(b), 0);
     pLabels.forEach((l, i) => {
+        if(i > 2) return; // limit to top 3 for space
         let color = pColors[i % pColors.length];
         let val = Number(pData[i]);
         let pct = totalPData > 0 ? Math.round((val / totalPData) * 100) : 0;
         legendHtml += `
-            <div class="dl-item">
-                <div class="dl-dot" style="background:${color}"></div>
-                <div style="font-weight:600; color:#111827; width:40px;">${pct}%</div>
-                <div style="text-transform: capitalize;">${l}</div>
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full" style="background:${color}"></div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold capitalize">${l}</div>
             </div>
         `;
     });
     document.getElementById('platformLegend').innerHTML = legendHtml;
-
-    // 3. RESERVATION CHART (Bar standard)
-    const resCtx = document.getElementById('reservationChart').getContext('2d');
-    let rLabels = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-    let rData = [2, 5, 3, 6, 4, 8, 5];
-    
-    new Chart(resCtx, {
-        type: 'bar',
-        data: {
-            labels: rLabels,
-            datasets: [
-                {
-                    label: 'Pesanan Selesai',
-                    data: rData,
-                    backgroundColor: '#d8b4fe',
-                    borderRadius: 6,
-                    barPercentage: 0.4,
-                    categoryPercentage: 0.6,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#f3f4f6', drawBorder: false },
-                    border: { display: false },
-                    ticks: { precision: 0, stepSize: 2 }
-                },
-                x: {
-                    grid: { display: false },
-                    border: { display: false }
-                }
-            }
-        }
-    });
 });
 </script>
 @endsection

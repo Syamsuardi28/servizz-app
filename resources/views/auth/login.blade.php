@@ -1,136 +1,86 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Servizz.io</title>
-    {{-- Google Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    {{-- Bootstrap Icons --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+@extends('layouts.guest-split')
+
+@section('title', 'Login')
+@section('header_title', 'Selamat Datang Kembali')
+@section('header_subtitle', 'Masuk ke akun Anda untuk melanjutkan')
+
+@section('content')
+
+<form method="POST" action="{{ route('login.post') }}" class="space-y-5 text-left">
+    @csrf
     
-    @vite(['resources/css/variables.css', 'resources/css/auth.css'])
-</head>
-<body>
-
-<div class="login-container">
-
-    <!-- Left Side: Banner / Illustration -->
-    <div class="login-left">
-        <div class="glow-circle glow-1"></div>
-        <div class="glow-circle glow-2"></div>
-        
-        <div class="left-brand">
-            <div class="brand-logo-circle"></div>
-            <span class="brand-name">Servizz.io</span>
-        </div>
-
-        <div class="left-content">
-            <h2 class="left-title">Dapatkan layanan jasa terbaik dengan mudah</h2>
-            <p class="left-subtitle">Platform terpercaya untuk menghubungkan Anda dengan mitra penyedia jasa handal, profesional, dan bersertifikat di sekitar Anda.</p>
-        </div>
-
-        <!-- 3D Folder Illustration -->
-        <div class="left-illustration-wrap">
-            <div class="folder-3d">
-                <div class="doc-card doc-card-1">
-                    <div class="doc-img">⭐</div>
-                    <div class="doc-bar primary"></div>
-                    <div class="doc-bar success"></div>
-                </div>
-                <div class="doc-card doc-card-2">
-                    <div class="doc-img">🛠️</div>
-                    <div class="doc-bar warning"></div>
-                    <div class="doc-bar"></div>
-                </div>
-                <div class="folder-front"></div>
+    <!-- Email -->
+    <div class="space-y-1.5">
+        <label for="email" class="block text-sm font-semibold text-[#EDEDEC]">Email Address</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-500">
+                <i data-lucide="mail" class="w-5 h-5"></i>
             </div>
-            <div class="magnifier-3d"></div>
+            <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
+                class="block w-full pl-11 pr-4 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
+                placeholder="Contoh: admin@servizz.com">
         </div>
     </div>
 
-    <!-- Right Side: Login Form -->
-    <div class="login-right">
-        <div class="login-form-box">
-            
-            <h1 class="form-header-title">Login</h1>
-
-            {{-- Alert --}}
-            @if(session('flash_message'))
-                <div class="custom-alert alert-info">
-                    <i class="bi bi-info-circle-fill me-2"></i> {{ session('flash_message') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="custom-alert alert-error">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="custom-alert alert-error">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <ul style="margin: 0; padding-left: 1rem;">
-                        @foreach($errors->all() as $e)
-                            <li>{{ $e }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('login.post') }}">
-                @csrf
-
-                <!-- Email Input -->
-                <div class="input-group-custom">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email', 'admin@servizz.com') }}" placeholder="mitcheldesigner@gmail.com" required autofocus>
-                </div>
-
-                <!-- Password Input -->
-                <div class="input-group-custom">
-                    <label for="password">Password</label>
-                    <div class="password-container">
-                        <input type="password" id="password" name="password" placeholder="••••••••••••••••" required>
-                        <button type="button" class="toggle-password" id="btnTogglePassword" title="Tampilkan sandi">
-                            <i class="bi bi-eye-slash" id="eyeIcon"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="form-options">
-                    <label class="remember-me">
-                        <input type="checkbox" name="remember" id="remember">
-                        <span>Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    Login
-                </button>
-            </form>
-
-            <div class="social-divider">or</div>
-
-            <div class="social-row">
-                <a href="#" class="social-btn fb"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="social-btn google"><i class="bi bi-google"></i></a>
+    <!-- Password -->
+    <div class="space-y-1.5" x-data="{ show: false }">
+        <label for="password" class="block text-sm font-semibold text-[#EDEDEC]">Password</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-500">
+                <i data-lucide="lock" class="w-5 h-5"></i>
             </div>
-
-            <div class="footer-text">
-                Don't have an account? <a href="{{ route('register') }}">Create Account</a>
-            </div>
-
+            <input :type="show ? 'text' : 'password'" id="password" name="password" required
+                class="block w-full pl-11 pr-11 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
+                placeholder="••••••••">
+            <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-500 hover:text-gray-300 focus:outline-none transition-colors">
+                <i data-lucide="eye" x-show="!show" class="w-5 h-5"></i>
+                <i data-lucide="eye-off" x-show="show" class="w-5 h-5" style="display: none;"></i>
+            </button>
         </div>
     </div>
 
+    <!-- Options -->
+    <div class="flex items-center justify-between">
+        <label class="flex items-center gap-2 cursor-pointer group">
+            <input type="checkbox" name="remember" class="w-4 h-4 rounded text-primary-600 bg-gray-50 dark:bg-[#161615] border-gray-300 dark:border-[#3E3E3A] focus:ring-primary-500 focus:ring-offset-gray-50 dark:focus:ring-offset-[#161615] transition-colors">
+            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">Ingat saya</span>
+        </label>
+        <a href="{{ route('password.request') }}" class="text-sm font-semibold text-primary-500 hover:text-primary-400 transition-colors">Lupa password?</a>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-xl shadow-lg shadow-primary-500/20 transition-all active:scale-[0.98]">
+        <i data-lucide="log-in" class="w-5 h-5"></i>
+        Masuk
+    </button>
+</form>
+
+<!-- Social Login Divider -->
+<div class="mt-8 mb-6 relative flex items-center justify-center">
+    <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-[#3E3E3A]"></div>
+    </div>
+    <div class="relative bg-[#161615] px-4 text-xs font-medium text-gray-500">
+        Atau masuk dengan
+    </div>
 </div>
 
-<script src="{{ asset('js/auth.js') }}"></script>
-</body>
-</html>
+<!-- Social Buttons -->
+    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <a href="{{ route('social.redirect', 'google') }}" class="flex-1 flex justify-center items-center gap-2 py-2.5 px-4 bg-white dark:bg-[#161615] border border-gray-200 dark:border-[#3E3E3A] rounded-xl shadow-sm text-sm font-semibold text-gray-700 dark:text-[#EDEDEC] hover:bg-gray-50 dark:hover:bg-[#1f1f1e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 dark:focus:ring-[#3E3E3A] transition-all">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Google
+        </a>
+    </div>
 
+<!-- Register Link -->
+<div class="mt-8 text-center text-sm text-gray-400">
+    Belum punya akun? <a href="{{ route('register') }}" class="font-bold text-primary-500 hover:text-primary-400 transition-colors">Daftar sekarang</a>
+</div>
+
+@endsection

@@ -1,148 +1,127 @@
-{{-- Lokasi: resources/views/orders/index.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Kelola Pesanan')
 @section('breadcrumb', 'Pesanan')
 
 @section('content')
-@php
-$badgeMap = [
-    'Menunggu'          => 'yellow',
-    'Dikonfirmasi'      => 'blue',
-    'Teknisi Berangkat' => 'indigo',
-    'Sedang Dikerjakan' => 'purple',
-    'Selesai'           => 'green',
-    'Dibatalkan'        => 'red',
-];
-@endphp
 
-@push('styles')
-    @vite('resources/css/orders.css')
-@endpush
-
-<div class="ord-wrap">
-
-    {{-- ── Header ── --}}
-    <div class="ord-header-bar">
-        <div class="ord-tabs">
-            <a href="#" class="ord-tab active"><i class="bi bi-list-task"></i> List</a>
-        </div>
-        
-        <div class="ord-filters">
-            <div class="ord-filter-select" style="position:relative; padding-right: 24px;">
-                <span>Show:</span> 
-                <select id="statusFilter" onchange="updateFilters()" style="background:transparent; border:none; font-weight:700; color:#1e293b; outline:none; cursor:pointer; appearance:none; margin-left:4px;">
-                    <option value="">All Projects</option>
-                    @foreach($statusList as $s)
-                        <option value="{{ $s }}" {{ $filterStatus === $s ? 'selected' : '' }}>{{ $s }}</option>
-                    @endforeach
-                </select>
-                <i class="bi bi-chevron-down" style="position:absolute; right:10px; pointer-events:none; font-size:12px; color:#1e293b; font-weight:bold;"></i>
-            </div>
-            @if(session('servizz_user.role') === 'Pelanggan')
-                <a href="{{ route('services.index') }}" class="ord-btn-add">
-                    <i class="bi bi-plus-lg"></i> Add Project
-                </a>
-            @else
-                <a href="{{ route('orders.index') }}" class="ord-btn-add">
-                    <i class="bi bi-arrow-clockwise"></i> Refresh
-                </a>
-            @endif
-        </div>
+<!-- Header Actions -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+    <div class="flex-1">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Daftar Pesanan</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola semua pesanan layanan dari pelanggan.</p>
     </div>
-
-    {{-- ── List Header ── --}}
-    <div class="ord-list-header">
-        <div><input type="checkbox" class="ord-checkbox" disabled></div>
-        <div>PROJECT NAME</div>
-        <div>START DATE</div>
-        <div>DEADLINE</div>
-        <div>CURRENCY</div>
-        <div>STATUS</div>
-        <div>PEOPLE</div>
-        <div style="text-align: right;"><i class="bi bi-plus-lg"></i></div>
-    </div>
-
-    {{-- ── List Items ── --}}
-    <div>
-        @forelse($orders as $index => $o)
-            @php
-                // Map color badges dynamically
-                $st = $o['status_order'];
-                $badgeClass = 'gray';
-                $prio = 'low';
-                if ($st === 'Selesai') { $badgeClass = 'green'; $prio = 'low'; }
-                elseif ($st === 'Menunggu') { $badgeClass = 'orange'; $prio = 'high'; }
-                elseif ($st === 'Dikonfirmasi') { $badgeClass = 'blue'; $prio = 'medium'; }
-                elseif ($st === 'Teknisi Berangkat') { $badgeClass = 'purple'; $prio = 'medium'; }
-                elseif ($st === 'Sedang Dikerjakan') { $badgeClass = 'teal'; $prio = 'low'; }
-                elseif ($st === 'Dibatalkan') { $badgeClass = 'red'; $prio = 'high'; }
-
-                // Prio label
-                $prioLabel = ucfirst($prio);
-
-                // Icon Background based on index
-                $iconColors = ['#3b82f6', '#ef4444', '#0ea5e9', '#a855f7', '#f59e0b', '#10b981'];
-                $bg = $iconColors[$index % count($iconColors)];
-                
-                // Get initials
-                $svcInitial = strtoupper(substr($o['nama_service'], 0, 1));
-            @endphp
-        <div class="ord-list-item">
-            
-            <div><input type="checkbox" class="ord-checkbox"></div>
-
-            <div class="ord-col-project">
-                <div class="ord-icon-box" style="background-color: {{ $bg }}">
-                    <i class="bi bi-boxes"></i>
-                </div>
-                <div class="ord-project-text">
-                    <span class="ord-project-title">{{ Str::limit($o['nama_service'], 25) }}</span>
-                    <span class="ord-project-sub">{{ Str::limit($o['nama_pelanggan'] ?? 'Pelanggan', 20) }}</span>
-                </div>
+    <div class="flex items-center gap-3">
+        <!-- Filter Status -->
+        <div class="relative">
+            <select id="statusFilter" onchange="updateFilters()" class="appearance-none bg-white dark:bg-[#161615] border border-gray-200 dark:border-[#3E3E3A] text-gray-700 dark:text-gray-300 py-2 pl-4 pr-10 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm font-medium transition-all">
+                <option value="">Semua Status</option>
+                @foreach($statusList as $s)
+                    <option value="{{ $s }}" {{ $filterStatus === $s ? 'selected' : '' }}>{{ $s }}</option>
+                @endforeach
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 dark:text-gray-400">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
             </div>
-
-            <div class="ord-col-text">
-                {{ \Carbon\Carbon::parse($o['tgl_kunjungan'])->format('d/m/Y') }}
-            </div>
-
-            <div class="ord-col-text">
-                {{ \Carbon\Carbon::parse($o['waktu_kunjungan'] ?? $o['tgl_kunjungan'])->format('H:i') }}
-            </div>
-
-            <div class="ord-col-currency">
-                Rp{{ number_format($o['biaya_kunjungan'], 0, ',', '.') }}
-            </div>
-
-            <div>
-                <span class="ord-badge ord-badge-{{ $badgeClass }}">
-                    {{ $st }}
-                </span>
-            </div>
-
-            <div class="ord-avatars">
-                @if($o['nama_mitra'] ?? null)
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($o['nama_mitra']) }}&background=random" class="ord-avatar" alt="Mitra">
-                @endif
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($o['nama_pelanggan'] ?? 'Pelanggan') }}&background=random" class="ord-avatar" alt="Pelanggan">
-            </div>
-            
-
-            <div>
-                <a href="{{ route('orders.show', $o['id_order']) }}" class="ord-action-btn" title="Detail">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </a>
-            </div>
-
         </div>
-        @empty
-        <div class="ord-empty">
-            <i class="bi bi-inbox"></i>
-            <p>Tidak ada pesanan{{ $filterStatus ? ' dengan status '.$filterStatus : '' }}.</p>
-        </div>
-        @endforelse
-    </div>
 
+        @if(session('servizz_user.role') === 'Pelanggan')
+            <x-button variant="primary" icon="plus" onclick="window.location.href='{{ route('services.index') }}'">Buat Pesanan</x-button>
+        @else
+            <x-button variant="secondary" icon="refresh-cw" onclick="window.location.href='{{ route('orders.index') }}'">Refresh</x-button>
+        @endif
+    </div>
 </div>
+
+<!-- Table Card -->
+<x-card class="p-0">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
+            <thead class="bg-gray-50 dark:bg-[#1f1f1e] text-gray-500 dark:text-gray-400 font-semibold border-b border-gray-100 dark:border-[#3E3E3A] uppercase text-xs tracking-wider">
+                <tr>
+                    <th class="px-6 py-4 w-12"><input type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"></th>
+                    <th class="px-6 py-4">Proyek & Pelanggan</th>
+                    <th class="px-6 py-4">Tgl & Waktu</th>
+                    <th class="px-6 py-4">Biaya</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4 text-center">Partisipan</th>
+                    <th class="px-6 py-4 text-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-[#3E3E3A]">
+                @forelse($orders as $index => $o)
+                    @php
+                        $st = $o['status_order'];
+                        $badgeVariant = 'gray';
+                        if ($st === 'Selesai') $badgeVariant = 'success';
+                        elseif ($st === 'Menunggu') $badgeVariant = 'warning';
+                        elseif ($st === 'Dikonfirmasi') $badgeVariant = 'info';
+                        elseif ($st === 'Teknisi Berangkat') $badgeVariant = 'primary';
+                        elseif ($st === 'Sedang Dikerjakan') $badgeVariant = 'primary';
+                        elseif ($st === 'Dibatalkan') $badgeVariant = 'danger';
+
+                        $iconColors = ['bg-blue-100 text-blue-600', 'bg-red-100 text-red-600', 'bg-emerald-100 text-emerald-600', 'bg-amber-100 text-amber-600', 'bg-purple-100 text-purple-600'];
+                        $bg = $iconColors[$index % count($iconColors)];
+                    @endphp
+                <tr class="hover:bg-gray-50/50 dark:bg-[#1f1f1e]/50 dark:hover:bg-[#262625]/50 transition-colors group">
+                    <td class="px-6 py-4"><input type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"></td>
+                    
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 {{ $bg }}">
+                                <i data-lucide="briefcase" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-[#EDEDEC] leading-tight group-hover:text-primary-600 transition-colors">{{ Str::limit($o['nama_service'], 30) }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ Str::limit($o['nama_pelanggan'] ?? 'Pelanggan', 25) }}</p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <p class="font-semibold text-gray-700 dark:text-gray-300">{{ \Carbon\Carbon::parse($o['tgl_kunjungan'])->format('d M Y') }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ \Carbon\Carbon::parse($o['waktu_kunjungan'] ?? $o['tgl_kunjungan'])->format('H:i') }} WIB</p>
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-900 dark:text-[#EDEDEC]">
+                        Rp {{ number_format($o['biaya_kunjungan'], 0, ',', '.') }}
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <x-badge :variant="$badgeVariant">{{ $st }}</x-badge>
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-center -space-x-2">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($o['nama_pelanggan'] ?? 'Pelanggan') }}&background=f3f4f6&color=4b5563&bold=true" class="w-8 h-8 rounded-full border-2 border-white shadow-sm ring-2 ring-white relative z-10" title="Pelanggan: {{ $o['nama_pelanggan'] ?? 'Pelanggan' }}">
+                            @if($o['nama_mitra'] ?? null)
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($o['nama_mitra']) }}&background=ffe1db&color=F53003&bold=true" class="w-8 h-8 rounded-full border-2 border-white shadow-sm ring-2 ring-white relative z-20" title="Mitra: {{ $o['nama_mitra'] }}">
+                            @endif
+                        </div>
+                    </td>
+
+                    <td class="px-6 py-4 text-right">
+                        <a href="{{ route('orders.show', $o['id_order']) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 dark:text-gray-500 hover:text-primary-600 hover:bg-primary-50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 dark:bg-[#1f1f1e] text-gray-400 dark:text-gray-500 mb-4">
+                            <i data-lucide="inbox" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-900 dark:text-[#EDEDEC]">Belum ada pesanan</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Tidak ada pesanan{{ $filterStatus ? ' dengan status '.$filterStatus : '' }} saat ini.</p>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</x-card>
+
+@endsection
 
 @section('scripts')
 <script>
@@ -153,6 +132,4 @@ function updateFilters() {
     window.location.href = url;
 }
 </script>
-@endsection
-
 @endsection

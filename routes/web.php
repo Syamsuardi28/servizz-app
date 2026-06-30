@@ -13,12 +13,24 @@ use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: Auth ─────────────────────────────────────────────────
-Route::get('/',       fn() => redirect()->route('login'));
+Route::get('/', function () {
+    return view('landing');
+})->name('home');
 Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
+
+// Lupa Password
+Route::get('/forgot-password', [\App\Http\Controllers\ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [\App\Http\Controllers\ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [\App\Http\Controllers\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [\App\Http\Controllers\ResetPasswordController::class, 'reset'])->name('password.update');
+
+// Social Login
+Route::get('/auth/{provider}/redirect', [\App\Http\Controllers\SocialLoginController::class, 'redirect'])->name('social.redirect');
+Route::get('/auth/{provider}/callback', [\App\Http\Controllers\SocialLoginController::class, 'callback'])->name('social.callback');
 
 // ── Debug Route (Remove in production) ─────────────────────────────
 Route::get('/debug/api/technicians', function() {
@@ -88,9 +100,16 @@ Route::middleware('servizz.auth')->group(function () {
     // Pengguna - Hanya Admin
     Route::prefix('users')->name('users.')->middleware('servizz.auth:Admin')->group(function () {
         Route::get('/',             [UserController::class, 'index'])->name('index');
+        Route::get('/reports/mitra', [ReportController::class, 'reportMitra'])->name('reports.mitra');
+        Route::get('/reports/services', [ReportController::class, 'reportServices'])->name('reports.services');
+        
         Route::get('/{id}',         [UserController::class, 'show'])->name('show');
         Route::post('/{id}/toggle', [UserController::class, 'toggle'])->name('toggle');
     });
+
+    // Help Center Admin
+    Route::get('/admin/help', [\App\Http\Controllers\HelpController::class, 'adminIndex'])->name('help.admin')->middleware('servizz.auth:Admin');
+    Route::post('/admin/help/{id}/reply', [\App\Http\Controllers\HelpController::class, 'adminReply'])->name('help.admin.reply')->middleware('servizz.auth:Admin');
 
     // Kategori Jasa - Semua Role bisa list, store hanya Admin
     Route::prefix('services-list')->name('services.')->group(function () {

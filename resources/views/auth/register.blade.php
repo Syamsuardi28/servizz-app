@@ -1,174 +1,133 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun — Servizz.io</title>
-    {{-- Google Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    {{-- Bootstrap Icons --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+@extends('layouts.guest-split')
+
+@section('title', 'Register')
+@section('header_title', 'Buat Akun Baru')
+@section('header_subtitle', 'Bergabunglah dengan ekosistem Servizz.io')
+
+@section('content')
+
+<form method="POST" action="{{ route('register.post') }}" class="space-y-5 text-left" enctype="multipart/form-data">
+    @csrf
     
-    @vite(['resources/css/variables.css', 'resources/css/auth.css'])
-</head>
-<body>
-
-<div class="login-container">
-
-    <!-- Left Side: Banner / Illustration -->
-    <div class="login-left">
-        <div class="glow-circle glow-1"></div>
-        <div class="glow-circle glow-2"></div>
-        
-        <div class="left-brand">
-            <div class="brand-logo-circle"></div>
-            <span class="brand-name">Servizz.io</span>
+    <div x-data="{ role: 'Pelanggan' }">
+        <!-- Role Selection -->
+        <div class="grid grid-cols-2 gap-2 mb-5 p-1 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl">
+            <label class="cursor-pointer">
+                <input type="radio" name="role" value="Pelanggan" x-model="role" class="peer sr-only">
+                <div class="py-2 text-center text-sm font-bold rounded-lg transition-all peer-checked:bg-white peer-checked:text-gray-900 peer-checked:shadow text-gray-400 hover:text-gray-300">
+                    Pelanggan
+                </div>
+            </label>
+            <label class="cursor-pointer">
+                <input type="radio" name="role" value="Mitra" x-model="role" class="peer sr-only">
+                <div class="py-2 text-center text-sm font-bold rounded-lg transition-all peer-checked:bg-primary-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-primary-500/30 text-gray-400 hover:text-gray-300">
+                    Mitra Jasa
+                </div>
+            </label>
         </div>
 
-        <div class="left-content">
-            <h2 class="left-title">Dapatkan layanan jasa terbaik dengan mudah</h2>
-            <p class="left-subtitle">Platform terpercaya untuk menghubungkan Anda dengan mitra penyedia jasa handal, profesional, dan bersertifikat di sekitar Anda.</p>
-        </div>
-
-        <!-- 3D Folder Illustration -->
-        <div class="left-illustration-wrap">
-            <div class="folder-3d">
-                <div class="doc-card doc-card-1">
-                    <div class="doc-img">⭐</div>
-                    <div class="doc-bar primary"></div>
-                    <div class="doc-bar success"></div>
+        <!-- Nama Lengkap -->
+        <div class="space-y-1.5">
+            <label for="nama" class="block text-sm font-semibold text-[#EDEDEC]">Nama Lengkap</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-500">
+                    <i data-lucide="user" class="w-5 h-5"></i>
                 </div>
-                <div class="doc-card doc-card-2">
-                    <div class="doc-img">🛠️</div>
-                    <div class="doc-bar warning"></div>
-                    <div class="doc-bar"></div>
-                </div>
-                <div class="folder-front"></div>
+                <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required autofocus
+                    class="block w-full pl-11 pr-4 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
+                    placeholder="Contoh: John Doe">
             </div>
-            <div class="magnifier-3d"></div>
         </div>
-    </div>
 
-    <!-- Right Side: Register Form -->
-    <div class="login-right">
-        <div class="login-form-box">
+        <!-- Email -->
+        <div class="space-y-1.5 mt-5">
+            <label for="email" class="block text-sm font-semibold text-[#EDEDEC]">Email Address</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-500">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                    class="block w-full pl-11 pr-4 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
+                    placeholder="Contoh: john@example.com">
+            </div>
+        </div>
+
+        <!-- Password & No HP -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+            <div class="space-y-1.5">
+                <label for="password" class="block text-sm font-semibold text-[#EDEDEC]">Password</label>
+                <div class="relative" x-data="{ show: false }">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-500">
+                        <i data-lucide="lock" class="w-5 h-5"></i>
+                    </div>
+                    <input :type="show ? 'text' : 'password'" id="password" name="password" required
+                        class="block w-full pl-11 pr-11 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
+                        placeholder="••••••••">
+                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-500 hover:text-gray-300 focus:outline-none transition-colors">
+                        <i data-lucide="eye" x-show="!show" class="w-5 h-5"></i>
+                        <i data-lucide="eye-off" x-show="show" class="w-5 h-5" style="display: none;"></i>
+                    </button>
+                </div>
+            </div>
             
-            <h1 class="form-header-title">Daftar Akun</h1>
-
-            @if(session('error'))
-                <div class="custom-alert alert-error">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="custom-alert alert-error">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <ul style="margin: 0; padding-left: 1rem;">
-                        @foreach($errors->all() as $e)
-                            <li>{{ $e }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('register.post') }}" enctype="multipart/form-data">
-                @csrf
-
-                <!-- Daftar Sebagai (Role Selector) -->
-                <span class="role-label-title">Daftar Sebagai</span>
-                <div class="role-selector-row">
-                    <label class="role-card active" id="roleLabelPelanggan">
-                        <input type="radio" name="role" value="Pelanggan" checked style="display:none">
-                        <i class="bi bi-person-fill"></i>
-                        <span>Pelanggan</span>
-                    </label>
-                    <label class="role-card" id="roleLabelMitra">
-                        <input type="radio" name="role" value="Mitra" style="display:none">
-                        <i class="bi bi-briefcase-fill"></i>
-                        <span>Mitra Jasa</span>
-                    </label>
-                </div>
-
-                <!-- Nama Lengkap -->
-                <div class="input-group-custom">
-                    <label for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" value="{{ old('nama') }}" placeholder="John Doe" required autofocus>
-                </div>
-
-                <!-- Email -->
-                <div class="input-group-custom">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="johndoe@gmail.com" required>
-                </div>
-
-                <!-- Password -->
-                <div class="input-group-custom">
-                    <label for="password">Password</label>
-                    <div class="password-container">
-                        <input type="password" id="password" name="password" placeholder="Min. 6 karakter" required>
-                        <button type="button" class="toggle-password" id="btnTogglePassword" title="Tampilkan sandi">
-                            <i class="bi bi-eye-slash" id="eyeIcon"></i>
-                        </button>
+            <div class="space-y-1.5">
+                <label for="no_hp" class="block text-sm font-semibold text-[#EDEDEC]">No. WhatsApp</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-500">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
                     </div>
+                    <input type="text" id="no_hp" name="no_hp" value="{{ old('no_hp') }}" required
+                        class="block w-full pl-11 pr-4 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
+                        placeholder="0812...">
                 </div>
+            </div>
+        </div>
 
-                <!-- No. HP -->
-                <div class="input-group-custom">
-                    <label for="no_hp">No. WhatsApp / HP</label>
-                    <input type="text" id="no_hp" name="no_hp" value="{{ old('no_hp') }}" placeholder="08123456789" required>
-                </div>
+        <!-- Alamat -->
+        <div class="space-y-1.5 mt-5">
+            <label for="alamat" class="block text-sm font-semibold text-[#EDEDEC]">Alamat Lengkap</label>
+            <textarea id="alamat" name="alamat" required rows="2"
+                class="block w-full px-4 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm resize-none" 
+                placeholder="Jl. Merdeka No. 123, Kota..."></textarea>
+        </div>
 
-                <!-- Alamat -->
-                <div class="input-group-custom">
-                    <label for="alamat">Alamat Lengkap</label>
-                    <textarea id="alamat" name="alamat" rows="2" placeholder="Jl. Raya Kemerdekaan No. 45, Jakarta" required>{{ old('alamat') }}</textarea>
-                </div>
+        <!-- Mitra Specific Fields -->
+        <div x-show="role === 'Mitra'" x-transition 
+             class="space-y-5 mt-5 p-4 bg-[#1f1f1e] border border-primary-500/30 rounded-xl"
+             style="display: none;">
+             
+             <div class="flex items-center gap-2 text-primary-400 mb-1">
+                 <i data-lucide="info" class="w-4 h-4"></i>
+                 <span class="text-xs font-bold uppercase tracking-wider">Dokumen Wajib Mitra</span>
+             </div>
 
-                <!-- Dokumen Mitra (Khusus Mitra) -->
-                <!-- Dokumen Mitra (Khusus Mitra) -->
-                <div id="mitraFiles" style="display: none;">
-                    <div class="input-group-custom file-upload-wrapper">
-                        <span class="file-label-title">Upload SKCK (Wajib untuk Mitra)</span>
-                        <div class="file-upload-btn-container">
-                            <label for="file_skck" class="file-upload-btn">
-                                <i class="bi bi-cloud-arrow-up"></i> Pilih File
-                            </label>
-                            <span id="file_skck_name" class="file-name-display">Belum ada file dipilih.</span>
-                        </div>
-                        <input type="file" id="file_skck" name="file_skck" accept=".pdf,image/*" style="display: none;">
-                    </div>
-                    
-                    <div class="input-group-custom file-upload-wrapper">
-                        <span class="file-label-title">Upload Sertifikat Keahlian (Wajib untuk Mitra)</span>
-                        <div class="file-upload-btn-container">
-                            <label for="file_sertifikat" class="file-upload-btn">
-                                <i class="bi bi-cloud-arrow-up"></i> Pilih File
-                            </label>
-                            <span id="file_sertifikat_name" class="file-name-display">Belum ada file dipilih.</span>
-                        </div>
-                        <input type="file" id="file_sertifikat" name="file_sertifikat" accept=".pdf,image/*" style="display: none;">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    Daftar Sekarang
-                </button>
-            </form>
-
-            <div class="footer-text">
-                Already have an account? <a href="{{ route('login') }}">Login</a>
+            <div class="space-y-1.5">
+                <label for="file_skck" class="block text-sm font-semibold text-[#EDEDEC]">Upload SKCK <span class="text-red-500">*</span></label>
+                <input type="file" id="file_skck" name="file_skck" accept=".pdf,.jpg,.jpeg,.png"
+                    class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-500/20 file:text-primary-400 hover:file:bg-primary-500/30 transition-all border border-[#3E3E3A] bg-[#161615] rounded-xl p-1 shadow-sm" 
+                    :required="role === 'Mitra'">
+                <p class="text-[11px] text-gray-500 mt-1">Format: PDF/JPG max 2MB.</p>
             </div>
 
+            <div class="space-y-1.5">
+                <label for="file_sertifikat" class="block text-sm font-semibold text-[#EDEDEC]">Sertifikat Keahlian <span class="text-red-500">*</span></label>
+                <input type="file" id="file_sertifikat" name="file_sertifikat" accept=".pdf,.jpg,.jpeg,.png"
+                    class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-500/20 file:text-primary-400 hover:file:bg-primary-500/30 transition-all border border-[#3E3E3A] bg-[#161615] rounded-xl p-1 shadow-sm" 
+                    :required="role === 'Mitra'">
+            </div>
         </div>
     </div>
 
+    <!-- Submit -->
+    <button type="submit" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-xl shadow-lg shadow-primary-500/20 transition-all active:scale-[0.98] mt-2">
+        <i data-lucide="user-plus" class="w-5 h-5"></i>
+        Daftar Akun
+    </button>
+</form>
+
+<!-- Login Link -->
+<div class="mt-8 text-center text-sm text-gray-400">
+    Sudah punya akun? <a href="{{ route('login') }}" class="font-bold text-primary-500 hover:text-primary-400 transition-colors">Masuk di sini</a>
 </div>
 
-<script src="{{ asset('js/auth.js') }}"></script>
-<script src="{{ asset('js/register.js') }}"></script>
-</body>
-</html>
-
+@endsection

@@ -1,11 +1,8 @@
-{{-- Lokasi: resources/views/users/index.blade.php --}}
 @extends('layouts.app')
-
 @section('title', 'Kelola Pengguna')
 @section('breadcrumb', 'Pengguna')
 
 @section('content')
-
 @php
     $totalPelanggan = count(array_filter($users, fn($u) => $u['role'] === 'Pelanggan'));
     $totalMitra     = count(array_filter($users, fn($u) => $u['role'] === 'Mitra'));
@@ -14,164 +11,156 @@
     $activePercent  = $totalAll > 0 ? round(($totalActive / $totalAll) * 100) : 0;
 @endphp
 
-<div class="upage-wrap">
-
-    {{-- ── Top Stat Cards ── --}}
-    <div class="upage-top-cards" style="margin-bottom: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        {{-- Card 1: Pelanggan --}}
-        <div class="ustat-card">
-            <div class="ustat-card-head">
-                <div class="ustat-icon-wrap" style="color: #db2777; background: #fdf2f8;">
-                    <i class="bi bi-people-fill"></i>
-                </div>
-                <div class="ustat-label-wrap">
-                    <span class="ustat-title">Pelanggan</span>
-                    <span class="ustat-sub">Terdaftar</span>
-                </div>
-            </div>
-            <div class="ustat-value-row">
-                <span class="ustat-val">{{ $totalPelanggan }}</span>
-                <div class="ustat-indicator-line" style="background: #db2777"></div>
-            </div>
-        </div>
-
-        {{-- Card 2: Mitra --}}
-        <div class="ustat-card">
-            <div class="ustat-card-head">
-                <div class="ustat-icon-wrap" style="color: #7c3aed; background: #f5f3ff;">
-                    <i class="bi bi-briefcase-fill"></i>
-                </div>
-                <div class="ustat-label-wrap">
-                    <span class="ustat-title">Mitra / Teknisi</span>
-                    <span class="ustat-sub">Mitra Terdaftar</span>
-                </div>
-            </div>
-            <div class="ustat-value-row">
-                <span class="ustat-val">{{ $totalMitra }}</span>
-                <div class="ustat-indicator-line" style="background: #7c3aed"></div>
-            </div>
-        </div>
-
-        {{-- Card 3: Gradient Total --}}
-        <div class="ustat-card-gradient">
-            <div class="ugrad-bg-pattern"></div>
-            <div class="ugrad-content">
-                <div class="ugrad-left">
-                    <div class="ugrad-val">{{ $totalActive }}</div>
-                    <div class="ugrad-lbl">Pengguna Aktif</div>
-                </div>
-                <div class="ugrad-right">
-                    <div class="ugrad-circle">
-                        <span>{{ $activePercent }}%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Header Actions -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <div class="flex-1">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Data Pengguna</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola seluruh pengguna (pelanggan & mitra) yang terdaftar pada sistem.</p>
     </div>
-
-    {{-- ── Middle Header Row (Search & Refresh) ── --}}
-    <div class="upage-mid-bar" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <div class="upage-tabs-bar" style="display: flex; gap: 8px;">
-            <a href="{{ route('users.index') }}" class="utab-link {{ !$role ? 'active' : '' }}">
-                Semua
-            </a>
-            <a href="{{ route('users.index', ['role' => 'Pelanggan']) }}" class="utab-link {{ $role === 'Pelanggan' ? 'active' : '' }}">
-                Pelanggan
-            </a>
-            <a href="{{ route('users.index', ['role' => 'Mitra']) }}" class="utab-link {{ $role === 'Mitra' ? 'active' : '' }}">
-                Mitra
-            </a>
-        </div>
-        <div class="upage-actions-wrap" style="display: flex; gap: 12px; flex: 1; max-width: 400px;">
-            <div class="upage-search-box" style="flex: 1; position: relative;">
-                <i class="bi bi-search search-icon" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-                <input type="text" id="userSearch" class="upage-search-input" placeholder="Cari pengguna..." style="width: 100%; padding: 10px 16px 10px 44px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
-            </div>
-            <a href="{{ route('users.index') }}" class="upage-refresh-btn" style="background: #ffffff; border: 1px solid #e2e8f0; padding: 10px 16px; border-radius: 8px; color: #475569; text-decoration: none; font-weight: 600;">
-                <i class="bi bi-arrow-clockwise"></i>
-            </a>
-        </div>
-    </div>
-
-    {{-- ── Card Grid ── --}}
-    <div class="ats-user-grid">
-        @forelse($users as $u)
-            @php
-                $initial = strtoupper(substr($u['nama'] ?? 'U', 0, 1));
-                
-                $noHp = $u['no_hp'] ?? '';
-                $waLink = $noHp ? 'https://wa.me/' . preg_replace('/^0/', '62', $noHp) : '#';
-            @endphp
-            <div class="ats-u-card">
-                <a href="{{ route('users.show', $u['id_user']) }}" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; width:100%;">
-                    <div class="ats-u-avatar-wrap">
-                        <div class="ats-u-avatar" style="background: {{ $u['role'] === 'Pelanggan' ? 'linear-gradient(135deg, #0ea5e9, #2563eb)' : 'linear-gradient(135deg, #f59e0b, #ea580c)' }}">
-                            {{ $initial }}
-                        </div>
-                    </div>
-                    
-                    <h3 class="ats-u-name">{{ $u['nama'] }}</h3>
-                    <p class="ats-u-role">{{ $u['role'] }}</p>
-                </a>
-
-                {{-- Action Circles --}}
-                <div class="ats-u-circles">
-                    <div class="ats-u-circle" title="{{ $u['email'] }}">
-                        <i class="bi bi-envelope"></i>
-                    </div>
-                    <div class="ats-u-circle" title="{{ $u['no_hp'] ?? 'Tidak ada nomor' }}">
-                        <i class="bi bi-telephone"></i>
-                    </div>
-                    <div class="ats-u-circle" title="Bergabung pada {{ \Carbon\Carbon::parse($u['created_at'])->format('d M Y') }}">
-                        <i class="bi bi-calendar"></i>
-                    </div>
-                    <div class="ats-u-circle" title="{{ $u['is_active'] ? 'Akun Aktif' : 'Akun Nonaktif' }}" style="color: {{ $u['is_active'] ? '#10b981' : '#ef4444' }}; border-color: {{ $u['is_active'] ? '#a7f3d0' : '#fecaca' }}">
-                        <i class="bi bi-toggle-{{ $u['is_active'] ? 'on' : 'off' }}"></i>
-                    </div>
-                </div>
-
-                {{-- Action Buttons --}}
-                <div class="ats-u-buttons">
-                    <a href="{{ $waLink }}" target="{{ $noHp ? '_blank' : '_self' }}" class="ats-u-btn ats-btn-msg" onclick="{{ !$noHp ? 'alert(\'Nomor HP tidak tersedia\'); return false;' : '' }}">
-                        hubungi
-                    </a>
-                    
-                    <form method="POST" action="{{ route('users.toggle', $u['id_user']) }}" onsubmit="confirmToggle(event, this, '{{ $u['is_active'] ? 'menonaktifkan' : 'mengaktifkan' }}', '{{ addslashes($u['nama']) }}')" style="margin:0; flex:1; display:flex;">
-                        @csrf
-                        <button type="submit" class="ats-u-btn ats-btn-status">
-                            {{ $u['is_active'] ? 'nonaktifkan' : 'aktifkan' }}
-                        </button>
-                    </form>
-                </div>
-            </div>
-        @empty
-            <div style="grid-column: 1 / -1; text-align: center; padding: 60px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1; color: #64748b;">
-                <i class="bi bi-people" style="font-size: 32px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
-                <p>Tidak ada pengguna ditemukan.</p>
-            </div>
-        @endforelse
-    </div>
-
 </div>
 
-@push('styles')
-    @vite('resources/css/users.css')
-@endpush
+<!-- Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white dark:bg-[#161615] rounded-2xl p-5 border border-gray-100 dark:border-[#3E3E3A] shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+            <i data-lucide="users" class="w-6 h-6"></i>
+        </div>
+        <div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-0.5">Total Pelanggan</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-[#EDEDEC] leading-none">{{ $totalPelanggan }}</p>
+        </div>
+    </div>
+    
+    <div class="bg-white dark:bg-[#161615] rounded-2xl p-5 border border-gray-100 dark:border-[#3E3E3A] shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+            <i data-lucide="briefcase" class="w-6 h-6"></i>
+        </div>
+        <div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-0.5">Total Mitra</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-[#EDEDEC] leading-none">{{ $totalMitra }}</p>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-[#161615] rounded-2xl p-5 border border-gray-100 dark:border-[#3E3E3A] shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+            <i data-lucide="user-check" class="w-6 h-6"></i>
+        </div>
+        <div class="flex-1">
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-0.5">Pengguna Aktif</p>
+            <div class="flex items-center gap-2">
+                <p class="text-2xl font-bold text-gray-900 dark:text-[#EDEDEC] leading-none">{{ $totalActive }}</p>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                    {{ $activePercent }}%
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters & Search -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+    <div class="flex overflow-x-auto gap-2 pb-2 sm:pb-0 hide-scrollbar w-full sm:w-auto p-1 bg-gray-50 dark:bg-[#161615] border border-gray-100 dark:border-[#3E3E3A] rounded-xl">
+        <a href="{{ route('users.index') }}" class="shrink-0 px-4 py-2 rounded-lg text-sm font-bold transition-all {{ !$role ? 'bg-white dark:bg-[#262625] text-primary-600 dark:text-primary-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' }}">Semua</a>
+        <a href="{{ route('users.index', ['role' => 'Pelanggan']) }}" class="shrink-0 px-4 py-2 rounded-lg text-sm font-bold transition-all {{ $role === 'Pelanggan' ? 'bg-white dark:bg-[#262625] text-primary-600 dark:text-primary-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' }}">Pelanggan</a>
+        <a href="{{ route('users.index', ['role' => 'Mitra']) }}" class="shrink-0 px-4 py-2 rounded-lg text-sm font-bold transition-all {{ $role === 'Mitra' ? 'bg-white dark:bg-[#262625] text-primary-600 dark:text-primary-400 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300' }}">Mitra</a>
+    </div>
+
+    <div class="flex items-center gap-2 w-full md:w-auto">
+        <div class="relative flex-1 md:w-64">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500"></i>
+            <input type="text" id="userSearch" placeholder="Cari pengguna..." class="w-full pl-9 pr-4 py-2 bg-white dark:bg-[#161615] border border-gray-200 dark:border-[#3E3E3A] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 shadow-sm transition-shadow">
+        </div>
+        <button onclick="window.location.reload()" class="p-2.5 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#161615] border border-gray-200 dark:border-[#3E3E3A] rounded-xl hover:bg-gray-50 dark:hover:bg-[#262625] dark:bg-[#1f1f1e] hover:text-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    @forelse($users as $u)
+        @php
+            $initial = strtoupper(substr($u['nama'] ?? 'U', 0, 1));
+            $noHp = $u['no_hp'] ?? '';
+            $waLink = $noHp ? 'https://wa.me/' . preg_replace('/^0/', '62', $noHp) : '#';
+            $bgGrad = $u['role'] === 'Pelanggan' ? 'from-blue-500 to-indigo-600' : 'from-amber-500 to-orange-600';
+        @endphp
+        
+        <div class="bg-white dark:bg-[#161615] rounded-2xl shadow-sm border border-gray-100 dark:border-[#3E3E3A] flex flex-col p-6 items-center text-center group transition-all duration-300 hover:shadow-md hover:border-primary-200 dark:hover:border-primary-500/30 ats-u-card relative">
+            
+            <!-- Status Badge (Top Right) -->
+            <div class="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase {{ $u['is_active'] ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20' : 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/20' }}">
+                <div class="w-1.5 h-1.5 rounded-full {{ $u['is_active'] ? 'bg-emerald-500' : 'bg-red-500' }}"></div>
+                {{ $u['is_active'] ? 'Aktif' : 'Nonaktif' }}
+            </div>
+
+            <a href="{{ route('users.show', $u['id_user']) }}" class="block mb-4 mt-2">
+                <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br {{ $bgGrad }} text-white flex items-center justify-center text-3xl font-bold font-heading shadow-md ring-4 ring-white dark:ring-[#161615]">
+                    {{ $initial }}
+                </div>
+            </a>
+
+            <h3 class="text-lg font-bold text-gray-900 dark:text-[#EDEDEC] font-heading leading-tight line-clamp-1">{{ $u['nama'] }}</h3>
+            <p class="text-sm font-semibold text-primary-600 dark:text-primary-400 mt-1">{{ $u['role'] }}</p>
+
+            <!-- Stats/Icons -->
+            <div class="w-full mt-5 space-y-3 border-t border-gray-100 dark:border-[#3E3E3A] pt-4 text-sm">
+                <div class="flex justify-between items-center text-left bg-gray-50/50 dark:bg-[#1f1f1e] p-2.5 rounded-lg">
+                    <span class="text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wide flex items-center gap-1"><i data-lucide="mail" class="w-3.5 h-3.5"></i> Email</span>
+                    <span class="font-bold text-gray-900 dark:text-[#EDEDEC] text-right truncate max-w-[120px]" title="{{ $u['email'] }}">{{ Str::limit($u['email'], 12) }}</span>
+                </div>
+                <div class="flex justify-between items-center text-left bg-gray-50/50 dark:bg-[#1f1f1e] p-2.5 rounded-lg">
+                    <span class="text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wide flex items-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5"></i> HP</span>
+                    <span class="font-bold text-gray-900 dark:text-[#EDEDEC] text-right">{{ $noHp ? $noHp : '-' }}</span>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-2 w-full mt-6">
+                <a href="{{ $waLink }}" target="{{ $noHp ? '_blank' : '_self' }}" onclick="{{ !$noHp ? 'alert(\'Nomor HP tidak tersedia\'); return false;' : '' }}" class="flex-1 inline-flex justify-center items-center gap-1.5 px-3 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-[#262625] border border-gray-200 dark:border-[#3E3E3A] rounded-xl hover:bg-gray-100 dark:hover:bg-[#3E3E3A] transition-colors">
+                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Hubungi
+                </a>
+                
+                <form method="POST" action="{{ route('users.toggle', $u['id_user']) }}" class="flex-1" x-data @submit.prevent="confirmToggle($event, $el, '{{ $u['is_active'] ? 'menonaktifkan' : 'mengaktifkan' }}', '{{ addslashes($u['nama']) }}')">
+                    @csrf
+                    <button type="submit" class="w-full inline-flex justify-center items-center gap-1.5 px-3 py-2.5 text-xs font-bold rounded-xl transition-colors {{ $u['is_active'] ? 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 hover:bg-red-100 dark:hover:bg-red-500/20' : 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 hover:bg-emerald-100 dark:hover:bg-emerald-500/20' }}">
+                        <i data-lucide="{{ $u['is_active'] ? 'power-off' : 'power' }}" class="w-3.5 h-3.5"></i> 
+                        {{ $u['is_active'] ? 'Nonaktif' : 'Aktifkan' }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    @empty
+        <div class="col-span-full py-16 text-center bg-white dark:bg-[#161615] border border-gray-100 dark:border-[#3E3E3A] border-dashed rounded-3xl">
+            <div class="w-16 h-16 bg-gray-50 dark:bg-[#1f1f1e] text-gray-400 dark:text-gray-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="users-2" class="w-8 h-8"></i>
+            </div>
+            <h4 class="text-lg font-bold text-gray-900 dark:text-[#EDEDEC] font-heading">Tidak ada pengguna</h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Tidak ditemukan data pengguna untuk peran ini.</p>
+        </div>
+    @endforelse
+</div>
+
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-// SweetAlert Confirm
 function confirmToggle(event, formElement, actionName, userName) {
-    event.preventDefault();
     Swal.fire({
-        title: 'Konfirmasi Perubahan',
+        title: 'Konfirmasi',
         text: `Apakah Anda yakin ingin ${actionName} akun ${userName}?`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#0ea5e9',
+        confirmButtonColor: '#F53003',
         cancelButtonColor: '#94a3b8',
-        confirmButtonText: 'Ya, Lanjutkan!',
+        confirmButtonText: 'Ya, Lanjutkan',
         cancelButtonText: 'Batal',
-        background: '#ffffff',
-        borderRadius: '12px'
+        customClass: {
+            popup: 'rounded-2xl border border-gray-100 dark:border-[#3E3E3A] shadow-xl',
+            confirmButton: 'rounded-xl text-sm font-bold',
+            cancelButton: 'rounded-xl text-sm font-bold'
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             formElement.submit();
@@ -179,7 +168,6 @@ function confirmToggle(event, formElement, actionName, userName) {
     });
 }
 
-// Search user functionality (Adapted for Grid)
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('userSearch');
     if(searchInput) {

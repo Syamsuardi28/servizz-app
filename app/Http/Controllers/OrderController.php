@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderNotification;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -61,7 +65,13 @@ class OrderController extends Controller
             $techs   = ApiHelper::extractData($techRes, 'technicians', []);
         }
 
-        return view('orders.show', compact('order', 'evidence', 'techs'));
+        // Ambil Hiring Progress dari local DB
+        $progress = DB::table('order_progress')
+            ->where('order_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('orders.show', compact('order', 'evidence', 'techs', 'progress'));
     }
 
     /** POST /orders/{id}/assign */
@@ -83,14 +93,40 @@ class OrderController extends Controller
     /** POST /orders/{id}/status */
     public function updateStatus(Request $request, int $id)
     {
-        $request->validate(['status' => 'required|string']);
+        $request->validate([
+            'status' => 'required|string',
+            'description' => 'nullable|string'
+        ]);
 
         $res = ApiHelper::patch("/order/{$id}/status", ['status' => $request->status]);
 
         if (!$res['success']) {
             ApiHelper::flash($res['data']['message'] ?? 'Gagal mengubah status.', 'error');
         } else {
+            // Log ke order_progress
+            try {
+                DB::table('order_progress')->insert([
+                    'order_id' => $id,
+                    'status' => $request->status,
+                    'description' => $request->description ?? 'Status pesanan diubah menjadi ' . $request->status,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);
+            } catch (\Exception $e) {}
+
             ApiHelper::flash('Status pesanan berhasil diubah menjadi "' . $request->status . '".');
+
+            // Ambil data order terbaru untuk notifikasi
+            $resOrder = ApiHelper::get("/order/{$id}");
+            if ($resOrder['success']) {
+                $orderData = ApiHelper::extractData($resOrder, 'order', []);
+                try {
+                    $emailTo = 'pelanggan@example.com'; // Dalam produksi: $orderData['email_pelanggan']
+                    Mail::to($emailTo)->send(new OrderNotification($orderData));
+                } catch (\Exception $e) {
+                    // Abaikan jika gagal mengirim email (misal: koneksi terputus)
+                }
+            }
         }
 
         return redirect()->route('orders.show', $id);
