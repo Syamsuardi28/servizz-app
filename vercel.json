@@ -22,8 +22,10 @@
         }
     ],
     "env": {
+        "APP_NAME": "Servizz.io",
         "APP_ENV": "production",
         "APP_DEBUG": "false",
+        "APP_KEY": "base64:N6WEiiJAHvwZzf2R1Jf9n6ToWUP8+YjpzMaCGyQ2NMY=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -31,7 +33,14 @@
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "VIEW_COMPILED_PATH": "/tmp",
         "CACHE_DRIVER": "array",
+        "CACHE_STORE": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie"
+        "SESSION_DRIVER": "cookie",
+        "SESSION_ENCRYPT": "false",
+        "QUEUE_CONNECTION": "sync",
+        "DB_CONNECTION": "sqlite",
+        "DB_DATABASE": "/tmp/database.sqlite",
+        "FILESYSTEM_DISK": "local",
+        "SERVIZZ_API_URL": "https://servizz-api.vercel.app"
     }
 }
