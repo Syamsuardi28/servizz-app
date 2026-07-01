@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import TrustedBy from './components/TrustedBy';
@@ -12,10 +12,16 @@ import FAQ from './components/FAQ';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import LoadingScreen from './components/LoadingScreen';
 
 const App = ({ loginUrl, registerUrl, dashboardUrl, isAuthenticated }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
     return (
         <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 font-sans selection:bg-[#F53003] selection:text-white scroll-smooth overflow-x-hidden">
+            {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+            
+            <div className={`transition-all duration-1000 ease-out-expo ${isLoading ? 'opacity-0 scale-95 blur-md' : 'opacity-100 scale-100 blur-0'}`}>
             {/* Global decorative background */}
             <div className="fixed inset-0 pointer-events-none -z-50 overflow-hidden">
                 {/* Top-left ambient glow */}
@@ -186,6 +192,7 @@ const App = ({ loginUrl, registerUrl, dashboardUrl, isAuthenticated }) => {
 
             <Footer />
             <ScrollToTop />
+            </div>
         </div>
     );
 };

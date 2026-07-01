@@ -136,7 +136,7 @@
     "src": "_plus-jakarta-sans-700-normal-pWfpUei5.woff"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DtdXRIsn.css",
+    "file": "assets/app-BZul1YqX.css",
     "name": "app",
     "names": [
       "app.css"
@@ -145,7 +145,7 @@
     "isEntry": true
   },
   "resources/css/landing.css": {
-    "file": "assets/landing-BtaMDO6W.css",
+    "file": "assets/landing-Db5II_Pu.css",
     "name": "landing",
     "names": [
       "landing.css"
@@ -163,12 +163,15 @@
     ]
   },
   "resources/js/landing.jsx": {
-    "file": "assets/landing-KsmkjTot.js",
+    "file": "assets/landing-Dc_FhF-p.js",
     "name": "landing",
     "src": "resources/js/landing.jsx",
     "isEntry": true,
     "imports": [
       "_chunk-C8eOpuJ-.js"
+    ],
+    "dynamicImports": [
+      "resources/js/landing.jsx"
     ]
   }
 }

@@ -1,8 +1,10 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import anime from 'animejs';
 import { LogIn, LayoutDashboard, SearchCode, Star } from 'lucide-react';
 
 const HowItWorks = () => {
+    const sectionRef = useRef(null);
+
     const steps = [
         {
             icon: <LogIn className="w-6 h-6" />,
@@ -38,97 +40,123 @@ const HowItWorks = () => {
         },
     ];
 
-    return (
-        <section id="how-it-works" className="py-28 relative overflow-hidden">
-            {/* Decorative background */}
-            <div className="absolute top-0 inset-x-0 h-full bg-gradient-to-b from-transparent via-white/50 to-transparent dark:via-[#0a0a0a]/50 -z-10" />
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: '.how-header',
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        duration: 800,
+                        easing: 'easeOutExpo'
+                    });
 
-            <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                    // Draw the vertical line
+                    anime({
+                        targets: '.timeline-line',
+                        height: ['0%', '100%'],
+                        duration: 2000,
+                        easing: 'easeInOutSine'
+                    });
+
+                    // Reveal steps sequentially
+                    anime({
+                        targets: '.timeline-step',
+                        opacity: [0, 1],
+                        translateX: (el, i) => i % 2 === 0 ? [50, 0] : [-50, 0],
+                        scale: [0.9, 1],
+                        duration: 800,
+                        delay: anime.stagger(400, {start: 500}),
+                        easing: 'easeOutElastic(1, .8)'
+                    });
+
+                    // Pulse the nodes
+                    anime({
+                        targets: '.timeline-node',
+                        scale: [0, 1],
+                        opacity: [0, 1],
+                        duration: 600,
+                        delay: anime.stagger(400, {start: 400}),
+                        easing: 'easeOutBack'
+                    });
+
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <section id="how-it-works" ref={sectionRef} className="py-32 relative overflow-hidden bg-[#050505]">
+            <div className="container mx-auto px-6 max-w-5xl relative z-10">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="mb-5"
-                    >
-                        <span className="section-label">Cara Kerja</span>
-                    </motion.div>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-5 leading-[1.1]"
-                    >
+                <div className="how-header opacity-0 text-center max-w-3xl mx-auto mb-24">
+                    <div className="mb-5">
+                        <span className="section-label bg-white/5 border border-white/10 text-[#F53003]">Cara Kerja</span>
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-[1.1]">
                         Cara Kerja{' '}
                         <span className="text-gradient-primary">Servizz</span>
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed"
-                    >
+                    </h2>
+                    <p className="text-lg text-gray-400 leading-relaxed">
                         Proses pemesanan jasa yang transparan, mudah dilacak, dan aman di setiap langkahnya.
-                    </motion.p>
+                    </p>
                 </div>
 
                 <div className="relative">
-                    {/* Animated connector line */}
-                    <div className="hidden md:block absolute top-[52px] left-[10%] right-[10%] h-[2px] bg-gray-100 dark:bg-white/[0.06] rounded-full overflow-hidden">
-                        <motion.div
-                            initial={{ scaleX: 0, originX: 0 }}
-                            whileInView={{ scaleX: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.3 }}
-                            className="h-full bg-gradient-to-r from-blue-500 via-[#F53003] via-violet-500 to-emerald-500 rounded-full"
-                        />
+                    {/* Vertical Glowing Line */}
+                    <div className="absolute left-[40px] md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/[0.05]">
+                        <div className="timeline-line w-full bg-gradient-to-b from-[#F53003] via-amber-500 to-emerald-500 shadow-[0_0_15px_#F53003]" style={{ height: '0%' }} />
                     </div>
 
-                    <div className="grid md:grid-cols-4 gap-8 md:gap-6">
-                        {steps.map((step, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: 0.2 + index * 0.15 }}
-                                whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                                className="relative flex flex-col items-center text-center group"
-                            >
-                                {/* Step number — background large */}
-                                <div className="absolute -top-3 -right-2 text-7xl font-black text-gray-50 dark:text-white/[0.03] z-0 select-none leading-none">
-                                    0{index + 1}
-                                </div>
+                    <div className="space-y-16 md:space-y-24">
+                        {steps.map((step, index) => {
+                            const isEven = index % 2 === 0;
+                            return (
+                                <div key={index} className="relative flex flex-col md:flex-row items-start md:items-center justify-between group pl-24 md:pl-0">
+                                    
+                                    {/* Timeline Node */}
+                                    <div className="timeline-node opacity-0 absolute left-[40px] md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-black border-2 border-white z-20 transition-all duration-300 group-hover:scale-150 group-hover:border-[#F53003] group-hover:shadow-[0_0_20px_#F53003]" />
 
-                                {/* Icon circle — layered rings */}
-                                <div className={`relative z-10 mb-7 flex-shrink-0`}>
-                                    {/* Outer ring */}
-                                    <div className={`w-[104px] h-[104px] rounded-full ring-[6px] ${step.ring} flex items-center justify-center bg-white dark:bg-[#161615] shadow-xl border border-gray-100 dark:border-white/[0.06] group-hover:scale-105 transition-transform duration-400`}>
-                                        {/* Inner gradient circle */}
-                                        <div className={`w-[72px] h-[72px] rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white shadow-lg ${step.shadow}`}>
-                                            {step.icon}
+                                    {/* Left Content (Desktop) */}
+                                    <div className={`hidden md:block w-[45%] ${isEven ? 'text-right pr-12' : 'order-last text-left pl-12'}`}>
+                                        <div className={`timeline-step opacity-0 ${isEven ? 'ml-auto' : ''}`}>
+                                            <div className="text-6xl font-black text-white/[0.03] select-none -mb-6 relative z-0">
+                                                0{index + 1}
+                                            </div>
+                                            <div className="bg-white/[0.03] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 relative z-10 hover:bg-white/[0.06] transition-colors duration-300">
+                                                <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+                                                <p className="text-gray-400 text-sm leading-relaxed">{step.description}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    {/* Index badge */}
-                                    <div className={`absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br ${step.color} text-white text-[11px] font-black flex items-center justify-center shadow-lg ${step.shadow}`}>
-                                        {index + 1}
-                                    </div>
-                                </div>
 
-                                {/* Card content */}
-                                <div className="bg-white/70 dark:bg-white/[0.04] backdrop-blur-md border border-white/30 dark:border-white/[0.08] card-hover-border rounded-2xl p-5 w-full relative z-10">
-                                    <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2">
-                                        {step.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                                        {step.description}
-                                    </p>
+                                    {/* Mobile Content + Icon (Desktop) */}
+                                    <div className={`w-full md:w-[45%] ${isEven ? 'order-last text-left md:pl-12' : 'text-left md:text-right md:pr-12'}`}>
+                                        <div className={`timeline-step opacity-0 ${!isEven ? 'md:ml-auto' : ''} flex flex-col ${!isEven ? 'md:items-end' : ''}`}>
+                                            <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white mb-6 shadow-lg ${step.shadow} group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
+                                                {step.icon}
+                                            </div>
+                                            
+                                            {/* Mobile text content */}
+                                            <div className="md:hidden">
+                                                <div className="text-5xl font-black text-white/[0.05] select-none mb-2">0{index + 1}</div>
+                                                <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+                                                <p className="text-gray-400 text-sm leading-relaxed">{step.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </motion.div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>
