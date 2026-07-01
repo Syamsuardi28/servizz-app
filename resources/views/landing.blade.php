@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Servizz - Platform Jasa Profesional Terpercaya">
 
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <title>Servizz - Jasa Profesional</title>
 
     <!-- Preconnect for fonts -->
