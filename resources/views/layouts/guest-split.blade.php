@@ -8,156 +8,264 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="font-sans antialiased text-gray-900 dark:text-[#EDEDEC] bg-[#fdfdfc] dark:bg-[#0a0a0a] min-h-screen flex items-center justify-center p-4 py-8 sm:p-6 lg:p-12 relative overflow-x-hidden overscroll-none transition-colors duration-300">
+
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
-    <!-- Abstract Backgrounds (For the outer body) -->
-    <div class="absolute top-0 inset-x-0 h-screen bg-gradient-to-b from-primary-50/50 dark:from-primary-900/10 to-transparent -z-10 pointer-events-none"></div>
-    <div class="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
-    <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-amber-400/10 dark:bg-amber-400/5 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+    <!-- Spline 3D Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.51/build/spline-viewer.js"></script>
 
-    <!-- Main Container -->
-    <div class="w-full max-w-[1200px] bg-white dark:bg-[#0f0f0f] rounded-[2rem] shadow-2xl shadow-gray-200/50 dark:shadow-black/60 flex flex-col lg:flex-row overflow-hidden min-h-[700px] border border-white dark:border-[#1f1f1e] relative z-10">
+    <style>
+        /* Custom Noise Texture */
+        .bg-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-card {
+            background: rgba(22, 22, 21, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .spline-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0; /* GSAP will fade this in */
+            transform: scale(1.05);
+        }
         
-        <!-- Left Side (Info Panel) -->
-        <div class="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-between relative bg-[#fdfdfc] dark:bg-[#0f0f0f] border-r border-transparent dark:border-[#1f1f1e]">
-            <!-- Decorative Elements inside left panel -->
-            <div class="absolute top-0 right-0 w-64 h-64 bg-primary-50 dark:bg-primary-900/10 rounded-bl-[100px] -z-10 opacity-50"></div>
-            <div class="absolute bottom-10 right-10 w-32 h-32 bg-primary-100 dark:bg-primary-900/20 rounded-full blur-3xl -z-10 opacity-50"></div>
-            
-            <!-- Back Button -->
-            <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors mb-8 group w-max">
-                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-[#1f1f1e] group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
-                    <i data-lucide="arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-1"></i>
-                </div>
-                Kembali ke Landing Page
-            </a>
+        spline-viewer {
+            width: 100%;
+            height: 100%;
+        }
 
-            <!-- Top Branding -->
-            <div class="flex items-center gap-3 mb-12">
-                <div class="flex items-center justify-center w-10 h-10 text-white rounded-xl bg-primary-500 font-bold text-xl shadow-lg shadow-primary-500/30">
-                    S
-                </div>
-                <span class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Servizz.io</span>
+        /* Hide Spline Logo */
+        spline-viewer::part(logo) {
+            display: none !important;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-[#EDEDEC] bg-[#0a0a0a] min-h-screen relative overflow-hidden flex items-stretch">
+    
+    <!-- Background Elements -->
+    <div class="absolute inset-0 bg-noise"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-primary-600/10 rounded-full blur-[120px] -z-10 pointer-events-none mix-blend-screen"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] bg-amber-500/10 rounded-full blur-[100px] -z-10 pointer-events-none mix-blend-screen"></div>
+    <div class="absolute top-[40%] right-[20%] w-[20vw] h-[20vw] bg-primary-400/5 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+    <!-- Main Container Layout: 2 Columns Full Screen -->
+    <div class="w-full h-screen flex flex-col lg:flex-row relative z-10">
+        
+        <!-- Left Side (Branding & 3D, ~45%) -->
+        <div class="relative w-full lg:w-[45%] p-8 lg:p-14 flex flex-col justify-between overflow-hidden group hidden lg:flex bg-black/40 backdrop-blur-sm border-r border-white/5">
+            
+            <!-- 3D Spline Background -->
+            <div class="spline-container gsap-spline">
+                <!-- Using a premium abstract floating geometry from Spline with global events -->
+                <spline-viewer url="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" events-target="global" loading-anim-type="spinner-small-dark"></spline-viewer>
+                
+                <!-- Overlay to blend 3D with background and text -->
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent lg:bg-gradient-to-r lg:from-[#0a0a0a]/80 lg:via-transparent lg:to-[#0a0a0a] z-10 pointer-events-none"></div>
             </div>
 
-            <!-- Content -->
-            <div class="flex-1 max-w-lg">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-bold text-xs mb-6 border border-primary-100 dark:border-primary-900/30">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                    Platform Manajemen Jasa Modern
-                </div>
-                
-                <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
-                    Kelola Bisnis Jasa <br> Jadi <span class="text-primary-500">Lebih Mudah</span>
-                </h1>
-                
-                <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-10">
-                    Servizz.io membantu Anda mengelola pelanggan, layanan, tim, dan laporan dalam satu platform yang terintegrasi.
-                </p>
+            <!-- Content Over 3D -->
+            <div class="relative z-20 flex-1 flex flex-col">
+                <!-- Top Wrapper (Back Button + Logo) -->
+                <div class="gsap-left-item mb-12 flex flex-col items-start gap-8">
+                    <!-- Back Button -->
+                    <a href="{{ url('/') }}" class="inline-flex items-center gap-3 text-sm font-semibold text-gray-400 hover:text-white transition-all group backdrop-blur-md bg-white/5 p-2 pr-5 rounded-full border border-white/10 hover:border-white/20 shadow-lg w-max">
+                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-1"></i>
+                        </div>
+                        Kembali
+                    </a>
 
-                <!-- Features -->
-                <div class="space-y-6 mb-12">
-                    <div class="flex gap-4">
-                        <div class="flex items-center justify-center w-12 h-12 shrink-0 bg-white dark:bg-[#161615] border border-gray-100 dark:border-[#3E3E3A] rounded-2xl shadow-sm text-primary-500">
-                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    <!-- Logo -->
+                    <a href="{{ url('/') }}" class="inline-flex items-center gap-3 group/logo cursor-pointer w-max">
+                        <div class="relative flex items-center justify-center w-11 h-11 text-white rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 font-bold text-xl shadow-lg shadow-primary-500/30 overflow-hidden">
+                            <span class="relative z-10">S</span>
+                            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover/logo:translate-y-0 transition-transform duration-300 ease-out"></div>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-gray-200 text-sm">Aman & Terpercaya</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-relaxed">Data Anda terlindungi dengan sistem keamanan tingkat enterprise.</p>
-                        </div>
+                        <span class="text-2xl font-extrabold tracking-tight text-white font-['Plus_Jakarta_Sans']">Servizz.io</span>
+                    </a>
+                </div>
+
+                <!-- Spacer -->
+                <div class="flex-1"></div>
+
+                <!-- Text Content -->
+                <div class="max-w-md">
+                    <div class="gsap-left-item inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-primary-400 font-medium text-xs mb-6 backdrop-blur-sm">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                        Next-Gen Service Management
                     </div>
                     
-                    <div class="flex gap-4">
-                        <div class="flex items-center justify-center w-12 h-12 shrink-0 bg-white dark:bg-[#161615] border border-gray-100 dark:border-[#3E3E3A] rounded-2xl shadow-sm text-primary-500">
-                            <i data-lucide="zap" class="w-6 h-6"></i>
+                    <h1 class="gsap-left-item text-4xl lg:text-5xl font-extrabold text-white leading-[1.15] mb-5 font-['Plus_Jakarta_Sans'] tracking-tight">
+                        Kelola Bisnis Jasa <br> Lebih <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-300">Eksklusif</span>
+                    </h1>
+                    
+                    <p class="gsap-left-item text-gray-400 text-base leading-relaxed mb-8 font-['Inter']">
+                        Tingkatkan produktivitas dan skala bisnis Anda dengan platform manajemen modern yang dirancang untuk performa dan keamanan enterprise.
+                    </p>
+
+                    <!-- Trust/Features -->
+                    <div class="gsap-left-item flex items-center gap-6">
+                        <div class="flex -space-x-3">
+                            <img class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] object-cover" src="https://i.pravatar.cc/100?img=33" alt="User 1">
+                            <img class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] object-cover" src="https://i.pravatar.cc/100?img=47" alt="User 2">
+                            <img class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] object-cover" src="https://i.pravatar.cc/100?img=12" alt="User 3">
+                            <div class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] bg-primary-600 flex items-center justify-center text-xs font-bold text-white z-10">+1k</div>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-gray-200 text-sm">Cepat & Efisien</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-relaxed">Automasi proses bisnis untuk meningkatkan produktivitas tim Anda.</p>
+                        <div class="text-sm font-medium text-gray-300">
+                            Dipercaya oleh <span class="text-white font-bold">1,000+</span> bisnis
                         </div>
                     </div>
-
-                    <div class="flex gap-4">
-                        <div class="flex items-center justify-center w-12 h-12 shrink-0 bg-white dark:bg-[#161615] border border-gray-100 dark:border-[#3E3E3A] rounded-2xl shadow-sm text-primary-500">
-                            <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 dark:text-gray-200 text-sm">Laporan Real-time</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1 leading-relaxed">Pantau perkembangan bisnis dalam dashboard yang informatif.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trusted By -->
-            <div class="mt-auto pt-6 border-t border-gray-100 dark:border-[#1f1f1e]">
-                <p class="text-xs font-bold text-gray-900 dark:text-gray-500 mb-4">Dipercaya oleh banyak perusahaan</p>
-                <div class="flex flex-wrap items-center gap-6 opacity-60 dark:opacity-30 grayscale hover:grayscale-0 dark:hover:opacity-60 transition-all duration-300">
-                    <div class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-400 text-lg"><i data-lucide="aperture" class="w-5 h-5"></i> acme</div>
-                    <div class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-400 text-lg"><i data-lucide="box" class="w-5 h-5"></i> kanba</div>
-                    <div class="flex items-center gap-2 font-black tracking-tighter text-gray-800 dark:text-gray-400 text-lg">aven.</div>
-                    <div class="flex items-center gap-2 font-bold text-gray-800 dark:text-gray-400 text-lg"><i data-lucide="hexagon" class="w-5 h-5"></i> goldline</div>
                 </div>
             </div>
         </div>
 
-        <!-- Right Side (Auth Panel) -->
-        <div class="w-full lg:w-1/2 bg-[#161615] text-[#EDEDEC] p-6 sm:p-8 lg:p-12 xl:p-16 flex flex-col justify-center relative min-h-full">
-            
-            <div class="w-full max-w-md mx-auto text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#3E3E3A]/40 border border-[#3E3E3A] text-primary-500 shadow-inner mb-6">
-                    <i data-lucide="lock" class="w-7 h-7"></i>
+        <!-- Right Side (Form Panel, ~55%) -->
+        <div class="w-full lg:w-[55%] h-full relative z-20 overflow-y-auto custom-scrollbar">
+            <div class="min-h-full flex flex-col justify-center p-6 lg:p-12 xl:p-16">
+                <!-- Glass Form Container -->
+                <div class="w-full max-w-[480px] mx-auto glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden group/card transition-all duration-500 hover:shadow-primary-500/10">
+                    
+                    <!-- Inner Glow for Card -->
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-primary-500/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
+
+                <div class="text-center mb-8">
+                    <h2 class="gsap-right-item text-3xl font-extrabold text-white mb-3 font-['Plus_Jakarta_Sans'] tracking-tight">
+                        @yield('header_title', 'Welcome Back')
+                    </h2>
+                    <p class="gsap-right-item text-sm text-gray-400 font-['Inter']">
+                        @yield('header_subtitle', 'Masukkan kredensial Anda untuk melanjutkan')
+                    </p>
                 </div>
-                <h2 class="text-2xl font-extrabold text-white mb-2">
-                    @yield('header_title', 'Selamat Datang Kembali')
-                </h2>
-                <p class="text-sm text-gray-400">
-                    @yield('header_subtitle', 'Masuk ke akun Anda untuk melanjutkan')
-                </p>
-            </div>
 
-            <div class="w-full max-w-md mx-auto">
-                <!-- Flash Messages -->
-                @if(session('flash_message'))
-                    @php $type = session('flash_type') === 'error' ? 'danger' : 'success'; @endphp
-                    <x-alert :type="$type" :message="session('flash_message')" />
-                @endif
+                <!-- Alerts / Flash Messages -->
+                <div class="gsap-right-item w-full">
+                    @if(session('flash_message'))
+                        @php $type = session('flash_type') === 'error' ? 'danger' : 'success'; @endphp
+                        <x-alert :type="$type" :message="session('flash_message')" />
+                    @endif
 
-                @if(session('error'))
-                    <div class="mb-6 p-4 rounded-xl bg-red-900/20 border border-red-500/30 text-red-400 text-sm font-medium">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                            <strong>Error</strong>
+                    @if(session('error'))
+                        <div class="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium backdrop-blur-md flex gap-3 items-start shadow-[0_4px_16px_rgba(239,68,68,0.1)]">
+                            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                            <div>{{ session('error') }}</div>
                         </div>
-                        {{ session('error') }}
-                    </div>
-                @endif
+                    @endif
+                    
+                    @if(session('success'))
+                        <div class="mb-6 p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium backdrop-blur-md flex gap-3 items-start shadow-[0_4px_16px_rgba(34,197,94,0.1)]">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                            <div>{{ session('success') }}</div>
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium backdrop-blur-md flex gap-3 items-start shadow-[0_4px_16px_rgba(239,68,68,0.1)]">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Main Content (Form) -->
+                <div class="gsap-right-item">
+                    @yield('content')
+                </div>
                 
-                @if(session('success'))
-                    <div class="mb-6 p-4 rounded-xl bg-green-900/20 border border-green-500/30 text-green-400 text-sm font-medium">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if($errors->any())
-                    <div class="mb-6 p-4 rounded-xl bg-red-900/20 border border-red-500/30 text-red-400 text-sm font-medium">
-                        <ul class="list-disc list-inside">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                @yield('content')
+            </div>
+            <!-- End Glass Form Container -->
             </div>
         </div>
 
     </div>
 
+    <!-- Initialization Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lucide Icons init if not already handled by app.js
+            if(typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // GSAP Animations
+            gsap.config({ nullTargetWarn: false });
+
+            const tl = gsap.timeline();
+
+            // Spline container fade & scale
+            tl.to('.gsap-spline', {
+                opacity: 1,
+                scale: 1,
+                duration: 1.5,
+                ease: 'power3.out',
+                onComplete: () => {
+                    // Smooth continuous floating after entrance
+                    gsap.to('.gsap-spline', {
+                        y: -15,
+                        duration: 3,
+                        ease: "sine.inOut",
+                        yoyo: true,
+                        repeat: -1
+                    });
+                }
+            }, 0.2);
+
+            // Left panel text cascade
+            tl.from('.gsap-left-item', {
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out'
+            }, 0.4);
+
+            // Right panel form elements cascade
+            tl.from('.gsap-right-item', {
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out'
+            }, 0.6);
+        });
+    </script>
 </body>
 </html>
