@@ -13,6 +13,10 @@
     ],
     "routes": [
         {
+            "src": "/(favicon\\.ico|favicon\\.svg|robots\\.txt)",
+            "dest": "/public/$1"
+        },
+        {
             "src": "/(build|assets|images|uploads|css|js)/(.*)",
             "dest": "/public/$1/$2"
         },
