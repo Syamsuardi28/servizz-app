@@ -1,104 +1,100 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshTransmissionMaterial, ContactShadows, Environment, Stars, Line } from '@react-three/drei';
-import * as THREE from 'three';
-
-// A generic "Tech Object" representation (e.g., phone, laptop)
-const TechObject = ({ position, rotation, type, color }) => {
-    const meshRef = useRef();
-    
-    useFrame((state) => {
-        const t = state.clock.getElapsedTime();
-        meshRef.current.rotation.y = rotation[1] + Math.sin(t / 2) * 0.05;
-        meshRef.current.rotation.x = rotation[0] + Math.cos(t / 3) * 0.05;
-    });
-
-    return (
-        <Float speed={2} rotationIntensity={0.2} floatIntensity={1.5}>
-            <mesh ref={meshRef} position={position} rotation={rotation} castShadow receiveShadow>
-                {type === 'phone' ? (
-                    <boxGeometry args={[1, 2, 0.1]} />
-                ) : type === 'laptop' ? (
-                    <boxGeometry args={[3, 2, 0.1]} />
-                ) : type === 'router' ? (
-                    <cylinderGeometry args={[1, 1, 0.3, 32]} />
-                ) : (
-                    <octahedronGeometry args={[1]} />
-                )}
-                <MeshTransmissionMaterial 
-                    backside
-                    thickness={0.5}
-                    roughness={0.15}
-                    transmission={1}
-                    ior={1.5}
-                    chromaticAberration={0.06}
-                    color={color}
-                    emissive={color}
-                    emissiveIntensity={0.15}
-                />
-            </mesh>
-        </Float>
-    );
-};
-
-const GlowingLines = () => {
-    // Connect the objects
-    const points = [
-        [-4, 1.5, -2],
-        [3.5, 2.5, -4],
-        [0, -2.5, -1],
-        [-2, -1.5, -3],
-        [-4, 1.5, -2]
-    ];
-    return (
-        <Line 
-            points={points} 
-            color="#F53003" 
-            lineWidth={1.5} 
-            dashed={false}
-            transparent
-            opacity={0.4}
-        />
-    );
-};
-
-const Scene = () => {
-    const groupRef = useRef();
-
-    useFrame((state) => {
-        // Mouse parallax
-        const x = (state.pointer.x * Math.PI) / 20;
-        const y = (state.pointer.y * Math.PI) / 20;
-        
-        groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, x, 0.05);
-        groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -y, 0.05);
-    });
-
-    return (
-        <group ref={groupRef}>
-            <TechObject type="phone" position={[-4, 1.5, -2]} rotation={[0.2, 0.5, 0]} color="#F53003" />
-            <TechObject type="laptop" position={[3.5, 2.5, -4]} rotation={[-0.1, -0.4, 0]} color="#f59e0b" />
-            <TechObject type="router" position={[0, -2.5, -1]} rotation={[0.5, 0.1, 0]} color="#3b82f6" />
-            <TechObject type="server" position={[-2, -1.5, -3]} rotation={[0.3, 0.8, 0.2]} color="#10b981" />
-            
-            <GlowingLines />
-
-            <Environment preset="city" />
-            <ambientLight intensity={0.4} />
-            <directionalLight position={[10, 10, 5]} intensity={1.5} color="#fff" />
-            <pointLight position={[-10, -10, -10]} intensity={0.5} color="#F53003" />
-            <ContactShadows position={[0, -4, 0]} opacity={0.6} scale={25} blur={2.5} far={4} color="#000" />
-        </group>
-    );
-};
+import React from 'react';
+import { Smartphone, Laptop, Cpu, Wrench } from 'lucide-react';
 
 const SmartServiceHub = () => {
     return (
-        <div className="absolute inset-0 z-0 pointer-events-auto">
-            <Canvas camera={{ position: [0, 0, 10], fov: 40 }} dpr={[1, 2]}>
-                <Stars radius={100} depth={50} count={1000} factor={3} saturation={0.5} fade speed={1} />
-                <Scene />
-            </Canvas>
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30 dark:opacity-40">
+            <style>{`
+                @keyframes pulse-slow {
+                    0%, 100% {
+                        opacity: 0.2;
+                    }
+                    50% {
+                        opacity: 0.6;
+                    }
+                }
+                @keyframes dash {
+                    to {
+                        stroke-dashoffset: -40;
+                    }
+                }
+                @keyframes float-slow {
+                    0%, 100% {
+                        transform: translateY(0px) rotate(0deg);
+                    }
+                    50% {
+                        transform: translateY(-8px) rotate(2deg);
+                    }
+                }
+                @keyframes float-slower {
+                    0%, 100% {
+                        transform: translateY(0px) rotate(0deg);
+                    }
+                    50% {
+                        transform: translateY(8px) rotate(-2deg);
+                    }
+                }
+                .animate-pulse-slow {
+                    animation: pulse-slow 4s ease-in-out infinite;
+                }
+                .animate-dash {
+                    stroke-dasharray: 8, 12;
+                    animation: dash 15s linear infinite;
+                }
+                .animate-float-slow {
+                    animation: float-slow 8s ease-in-out infinite;
+                }
+                .animate-float-slower {
+                    animation: float-slower 10s ease-in-out infinite;
+                }
+            `}</style>
+
+            {/* Background Grid Mesh */}
+            <div className="absolute inset-0 opacity-[0.06] dark:opacity-[0.04] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+
+            {/* SVG Connecting Node Grid */}
+            <svg 
+                className="absolute inset-0 w-full h-full" 
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                {/* Connecting Lines */}
+                <path 
+                    className="animate-dash"
+                    d="M-100,200 L300,100 L450,300 L900,150 L1200,450 M200,600 L500,400 L800,700 L1100,500 L1400,650" 
+                    stroke="rgba(245,48,3,0.12)" 
+                    strokeWidth="1.5" 
+                    fill="none" 
+                />
+                <path 
+                    className="animate-dash"
+                    d="M150,150 L350,450 L750,250 L1050,600" 
+                    stroke="rgba(245,48,3,0.08)" 
+                    strokeWidth="1.5" 
+                    fill="none" 
+                />
+
+                {/* Glowing Grid Dots */}
+                <circle cx="300" cy="100" r="3" className="fill-[#F53003] animate-pulse-slow" />
+                <circle cx="450" cy="300" r="4" className="fill-amber-500 animate-pulse-slow" />
+                <circle cx="900" cy="150" r="3.5" className="fill-[#F53003] animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
+                <circle cx="500" cy="400" r="3" className="fill-amber-500 animate-pulse-slow" style={{ animationDelay: '0.8s' }} />
+                <circle cx="800" cy="700" r="5" className="fill-[#F53003] animate-pulse-slow" style={{ animationDelay: '2.2s' }} />
+                <circle cx="1100" cy="500" r="3" className="fill-orange-400 animate-pulse-slow" style={{ animationDelay: '1s' }} />
+            </svg>
+
+            {/* Floating Tech Badges (CSS-animated, 0% CPU Overhead) */}
+            <div className="absolute top-[18%] left-[10%] xl:left-[15%] animate-float-slow hidden md:flex items-center justify-center w-12 h-12 rounded-2xl bg-white/5 dark:bg-black/20 border border-white/10 shadow-xl backdrop-blur-md">
+                <Smartphone className="w-5 h-5 text-[#F53003]" />
+            </div>
+            <div className="absolute top-[15%] right-[20%] animate-float-slower hidden xl:flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 dark:bg-black/20 border border-white/10 shadow-xl backdrop-blur-md">
+                <Laptop className="w-6 h-6 text-amber-500" />
+            </div>
+            <div className="absolute bottom-[25%] left-[25%] animate-float-slower hidden lg:flex items-center justify-center w-12 h-12 rounded-2xl bg-white/5 dark:bg-black/20 border border-white/10 shadow-xl backdrop-blur-md">
+                <Cpu className="w-5 h-5 text-orange-500" />
+            </div>
+            <div className="absolute bottom-[20%] right-[35%] animate-float-slow hidden md:flex items-center justify-center w-13 h-13 rounded-2xl bg-white/5 dark:bg-black/20 border border-white/10 shadow-xl backdrop-blur-md">
+                <Wrench className="w-5.5 h-5.5 text-[#F53003]" />
+            </div>
         </div>
     );
 };

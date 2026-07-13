@@ -90,12 +90,89 @@
         <!-- Left Side (Branding & 3D, ~45%) -->
         <div class="relative w-full lg:w-[45%] p-8 lg:p-14 flex flex-col justify-between overflow-hidden group hidden lg:flex bg-black/40 backdrop-blur-sm border-r border-white/5">
             
-            <!-- 3D Spline Background -->
-            <div class="spline-container gsap-spline">
-                <!-- Using a premium abstract floating geometry from Spline with global events -->
-                <spline-viewer url="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" events-target="global" loading-anim-type="spinner-small-dark"></spline-viewer>
+            <!-- Pure CSS/HTML Abstract Floating Geometry (Zero Lag, No Spline Watermark) -->
+            <div class="spline-container gsap-spline flex items-center justify-center">
                 
-                <!-- Overlay to blend 3D with background and text -->
+                <!-- Background Mesh Grid Overlay -->
+                <div class="absolute inset-0 opacity-[0.07] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none"></div>
+
+                <!-- Ambient Radial Glow Core -->
+                <div class="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-br from-primary-500/20 to-amber-500/10 blur-[80px] pointer-events-none"></div>
+
+                <div class="relative w-[360px] h-[360px] flex items-center justify-center">
+                    
+                    <style>
+                        @keyframes slow-rotate {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                        @keyframes slow-float {
+                            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+                            50% { transform: translateY(-12px) rotate(1deg); }
+                        }
+                        .animate-slow-rotate {
+                            animation: slow-rotate 25s linear infinite;
+                        }
+                        .animate-slow-float {
+                            animation: slow-float 6s ease-in-out infinite;
+                        }
+                    </style>
+
+                    <!-- Glowing Orbit Ring -->
+                    <div class="animate-slow-rotate absolute w-72 h-72 rounded-full border border-dashed border-white/10 flex items-center justify-center">
+                        <div class="w-1.5 h-1.5 rounded-full bg-primary-500 absolute -top-1 shadow-[0_0_10px_#F53003]"></div>
+                        <div class="w-1 h-1 rounded-full bg-amber-400 absolute -bottom-0.5"></div>
+                    </div>
+
+                    <div class="animate-slow-rotate absolute w-56 h-56 rounded-full border border-white/[0.04]"></div>
+
+                    <!-- Inner Frosted Glass Ring (Behind Card) -->
+                    <div class="absolute w-48 h-48 rounded-full border border-white/5 bg-white/[0.01] backdrop-blur-md"></div>
+
+                    <!-- Premium Glassmorphic Debit Card (Representing Servizz Core) -->
+                    <div class="animate-slow-float absolute w-[260px] h-[162px] bg-gradient-to-br from-white/10 via-white/[0.02] to-transparent backdrop-blur-xl border border-white/15 rounded-2xl p-4 shadow-[0_30px_70px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:border-primary-500/30 transition-colors duration-500">
+                        <div class="flex justify-between items-start">
+                            <!-- Smart Chip -->
+                            <svg class="w-8 h-7 text-white/70 fill-current" viewBox="0 0 100 80">
+                                <rect width="100" height="80" rx="15" fill="rgba(255,255,255,0.08)" />
+                                <rect x="15" y="15" width="20" height="20" rx="5" />
+                                <rect x="40" y="15" width="20" height="20" rx="5" />
+                                <rect x="65" y="15" width="20" height="20" rx="5" />
+                                <rect x="15" y="45" width="20" height="20" rx="5" />
+                                <rect x="40" y="45" width="20" height="20" rx="5" />
+                                <rect x="65" y="45" width="20" height="20" rx="5" />
+                            </svg>
+                            <span class="text-[8px] font-black tracking-widest text-primary-400 bg-primary-500/10 border border-primary-500/20 px-2 py-0.5 rounded-full">SECURE</span>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-[11px] font-mono tracking-widest text-white/80">**** **** **** 2026</p>
+                            <div class="flex justify-between items-end mt-3">
+                                <div>
+                                    <p class="text-[6px] uppercase tracking-wider text-gray-500">Authorized User</p>
+                                    <p class="text-[10px] font-bold text-gray-300">SERVIZZ MEMBER</p>
+                                </div>
+                                <div class="flex -space-x-1.5 opacity-80">
+                                    <div class="w-4 h-4 rounded-full bg-primary-500"></div>
+                                    <div class="w-4 h-4 rounded-full bg-amber-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Info-Widgets -->
+                    <div class="absolute top-2 -right-6 bg-white/5 border border-white/10 backdrop-blur-md rounded-xl px-3 py-2 shadow-lg text-white flex items-center gap-1.5 animate-bounce" style="animation-duration: 3.5s;">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-primary-500"></i>
+                        <span class="text-[8px] font-black tracking-wider uppercase text-gray-300">Sistem Aman</span>
+                    </div>
+
+                    <div class="absolute bottom-4 -left-8 bg-white/5 border border-white/10 backdrop-blur-md rounded-xl px-3 py-2 shadow-lg text-white flex items-center gap-1.5 animate-bounce" style="animation-duration: 4s;">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
+                        <span class="text-[8px] font-black tracking-wider uppercase text-gray-300">Skala Enterprise</span>
+                    </div>
+
+                </div>
+
+                <!-- Overlay to blend with background and text -->
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent lg:bg-gradient-to-r lg:from-[#0a0a0a]/80 lg:via-transparent lg:to-[#0a0a0a] z-10 pointer-events-none"></div>
             </div>
 
@@ -135,22 +212,9 @@
                         Kelola Bisnis Jasa <br> Lebih <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-300">Eksklusif</span>
                     </h1>
                     
-                    <p class="gsap-left-item text-gray-400 text-base leading-relaxed mb-8 font-['Inter']">
+                    <p class="gsap-left-item text-gray-400 text-base leading-relaxed font-['Inter']">
                         Tingkatkan produktivitas dan skala bisnis Anda dengan platform manajemen modern yang dirancang untuk performa dan keamanan enterprise.
                     </p>
-
-                    <!-- Trust/Features -->
-                    <div class="gsap-left-item flex items-center gap-6">
-                        <div class="flex -space-x-3">
-                            <img class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] object-cover" src="https://i.pravatar.cc/100?img=33" alt="User 1">
-                            <img class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] object-cover" src="https://i.pravatar.cc/100?img=47" alt="User 2">
-                            <img class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] object-cover" src="https://i.pravatar.cc/100?img=12" alt="User 3">
-                            <div class="w-10 h-10 rounded-full border-2 border-[#0a0a0a] bg-primary-600 flex items-center justify-center text-xs font-bold text-white z-10">+1k</div>
-                        </div>
-                        <div class="text-sm font-medium text-gray-300">
-                            Dipercaya oleh <span class="text-white font-bold">1,000+</span> bisnis
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

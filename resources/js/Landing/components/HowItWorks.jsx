@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import anime from 'animejs';
+import React, { useEffect, useState, useRef } from 'react';
 import { LogIn, LayoutDashboard, SearchCode, Star } from 'lucide-react';
 
 const HowItWorks = () => {
     const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
 
     const steps = [
         {
@@ -44,43 +44,7 @@ const HowItWorks = () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    anime({
-                        targets: '.how-header',
-                        opacity: [0, 1],
-                        translateY: [20, 0],
-                        duration: 800,
-                        easing: 'easeOutExpo'
-                    });
-
-                    // Draw the vertical line
-                    anime({
-                        targets: '.timeline-line',
-                        height: ['0%', '100%'],
-                        duration: 2000,
-                        easing: 'easeInOutSine'
-                    });
-
-                    // Reveal steps sequentially
-                    anime({
-                        targets: '.timeline-step',
-                        opacity: [0, 1],
-                        translateX: (el, i) => i % 2 === 0 ? [50, 0] : [-50, 0],
-                        scale: [0.9, 1],
-                        duration: 800,
-                        delay: anime.stagger(400, {start: 500}),
-                        easing: 'easeOutElastic(1, .8)'
-                    });
-
-                    // Pulse the nodes
-                    anime({
-                        targets: '.timeline-node',
-                        scale: [0, 1],
-                        opacity: [0, 1],
-                        duration: 600,
-                        delay: anime.stagger(400, {start: 400}),
-                        easing: 'easeOutBack'
-                    });
-
+                    setIsVisible(true);
                     observer.unobserve(entry.target);
                 }
             });
@@ -94,10 +58,17 @@ const HowItWorks = () => {
     }, []);
 
     return (
-        <section id="how-it-works" ref={sectionRef} className="py-32 relative overflow-hidden bg-[#050505]">
+        <section id="how-it-works" ref={sectionRef} className="py-32 relative overflow-hidden bg-[#050505] transition-colors duration-500">
+            {/* Subtle glow backdrop */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,48,3,0.01)_0%,transparent_80%)]" />
+
             <div className="container mx-auto px-6 max-w-5xl relative z-10">
                 {/* Header */}
-                <div className="how-header opacity-0 text-center max-w-3xl mx-auto mb-24">
+                <div 
+                    className={`text-center max-w-3xl mx-auto mb-24 transition-all duration-800 ease-out transform ${
+                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    }`}
+                >
                     <div className="mb-5">
                         <span className="section-label bg-white/5 border border-white/10 text-[#F53003]">Cara Kerja</span>
                     </div>
@@ -113,7 +84,10 @@ const HowItWorks = () => {
                 <div className="relative">
                     {/* Vertical Glowing Line */}
                     <div className="absolute left-[40px] md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/[0.05]">
-                        <div className="timeline-line w-full bg-gradient-to-b from-[#F53003] via-amber-500 to-emerald-500 shadow-[0_0_15px_#F53003]" style={{ height: '0%' }} />
+                        <div 
+                            className="w-full bg-gradient-to-b from-[#F53003] via-amber-500 to-emerald-500 shadow-[0_0_15px_#F53003] transition-all duration-[2000ms] ease-in-out" 
+                            style={{ height: isVisible ? '100%' : '0%' }}
+                        />
                     </div>
 
                     <div className="space-y-16 md:space-y-24">
@@ -123,11 +97,23 @@ const HowItWorks = () => {
                                 <div key={index} className="relative flex flex-col md:flex-row items-start md:items-center justify-between group pl-24 md:pl-0">
                                     
                                     {/* Timeline Node */}
-                                    <div className="timeline-node opacity-0 absolute left-[40px] md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-black border-2 border-white z-20 transition-all duration-300 group-hover:scale-150 group-hover:border-[#F53003] group-hover:shadow-[0_0_20px_#F53003]" />
+                                    <div 
+                                        className={`absolute left-[40px] md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-black border-2 border-white z-20 transition-all duration-500 ease-out transform group-hover:scale-150 group-hover:border-[#F53003] group-hover:shadow-[0_0_20px_#F53003] ${
+                                            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
+                                        }`}
+                                        style={{ transitionDelay: `${index * 300}ms` }}
+                                    />
 
                                     {/* Left Content (Desktop) */}
                                     <div className={`hidden md:block w-[45%] ${isEven ? 'text-right pr-12' : 'order-last text-left pl-12'}`}>
-                                        <div className={`timeline-step opacity-0 ${isEven ? 'ml-auto' : ''}`}>
+                                        <div 
+                                            className={`transition-all duration-800 ease-out transform ${
+                                                isVisible 
+                                                    ? 'opacity-100 translate-x-0 scale-100' 
+                                                    : `opacity-0 ${isEven ? 'translate-x-8' : '-translate-x-8'} scale-95`
+                                            }`}
+                                            style={{ transitionDelay: `${index * 300 + 150}ms` }}
+                                        >
                                             <div className="text-6xl font-black text-white/[0.03] select-none -mb-6 relative z-0">
                                                 0{index + 1}
                                             </div>
@@ -140,8 +126,15 @@ const HowItWorks = () => {
 
                                     {/* Mobile Content + Icon (Desktop) */}
                                     <div className={`w-full md:w-[45%] ${isEven ? 'order-last text-left md:pl-12' : 'text-left md:text-right md:pr-12'}`}>
-                                        <div className={`timeline-step opacity-0 ${!isEven ? 'md:ml-auto' : ''} flex flex-col ${!isEven ? 'md:items-end' : ''}`}>
-                                            <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white mb-6 shadow-lg ${step.shadow} group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
+                                        <div 
+                                            className={`transition-all duration-800 ease-out transform flex flex-col ${!isEven ? 'md:items-end' : ''} ${
+                                                isVisible 
+                                                    ? 'opacity-100 translate-y-0 scale-100' 
+                                                    : 'opacity-0 translate-y-8 scale-95'
+                                            }`}
+                                            style={{ transitionDelay: `${index * 300}ms` }}
+                                        >
+                                            <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white mb-6 shadow-lg ${step.shadow} group-hover:scale-105 group-hover:rotate-3 transition-all duration-500`}>
                                                 {step.icon}
                                             </div>
                                             

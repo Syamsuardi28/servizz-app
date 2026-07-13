@@ -18,7 +18,7 @@
             </div>
             <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
                 class="block w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-white text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 hover:border-white/20 hover:bg-white/10 transition-all placeholder-gray-600 outline-none" 
-                placeholder="admin@servizz.com">
+                placeholder="Masukkan email">
         </div>
     </div>
 

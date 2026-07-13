@@ -41,6 +41,80 @@ class OrderController extends Controller
         return view('orders.index', compact('orders', 'filterStatus', 'statusList', 'sort'));
     }
 
+    /** GET /orders/export */
+    public function export(Request $request)
+    {
+        $res    = ApiHelper::get('/order');
+        $orders = ApiHelper::extractData($res, 'orders', []);
+
+        // Filter status
+        $filterStatus = $request->query('status', '');
+        if ($filterStatus) {
+            $orders = array_filter($orders, fn($o) => $o['status_order'] === $filterStatus);
+        }
+
+        // Sorting
+        $sort = $request->query('sort', 'date_desc');
+        if ($sort === 'date_desc') {
+            usort($orders, fn($a, $b) => strtotime($b['tgl_kunjungan'] ?? 0) - strtotime($a['tgl_kunjungan'] ?? 0));
+        } elseif ($sort === 'date_asc') {
+            usort($orders, fn($a, $b) => strtotime($a['tgl_kunjungan'] ?? 0) - strtotime($b['tgl_kunjungan'] ?? 0));
+        } elseif ($sort === 'price_desc') {
+            usort($orders, fn($a, $b) => ($b['biaya_kunjungan'] ?? 0) <=> ($a['biaya_kunjungan'] ?? 0));
+        } elseif ($sort === 'price_asc') {
+            usort($orders, fn($a, $b) => ($a['biaya_kunjungan'] ?? 0) <=> ($b['biaya_kunjungan'] ?? 0));
+        }
+
+        $fileName = 'daftar-pesanan-' . date('Y-m-d') . '.csv';
+
+        $headers = [
+            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = [
+            'ID Pesanan', 
+            'Nama Layanan', 
+            'Nama Pelanggan', 
+            'Nama Mitra', 
+            'Tanggal Kunjungan', 
+            'Waktu Kunjungan', 
+            'Biaya Kunjungan', 
+            'Status Order', 
+            'Keterangan'
+        ];
+
+        $callback = function() use($orders, $columns) {
+            $file = fopen('php://output', 'w');
+            
+            // Add UTF-8 BOM for Excel compatibility (essential for Indonesian regional settings in Excel)
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            fputcsv($file, $columns, ';'); 
+
+            foreach ($orders as $o) {
+                fputcsv($file, [
+                    $o['id_order'] ?? '',
+                    $o['nama_service'] ?? '',
+                    $o['nama_pelanggan'] ?? '',
+                    $o['nama_mitra'] ?? 'Belum Ditugaskan',
+                    !empty($o['tgl_kunjungan']) ? Carbon::parse($o['tgl_kunjungan'])->format('Y-m-d') : '',
+                    !empty($o['waktu_kunjungan']) ? Carbon::parse($o['waktu_kunjungan'])->format('H:i') : '',
+                    $o['biaya_kunjungan'] ?? 0,
+                    $o['status_order'] ?? '',
+                    $o['keterangan'] ?? ''
+                ], ';');
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     /** GET /orders/{id} */
     public function show(int $id)
     {

@@ -1,11 +1,38 @@
-import React, { useEffect, useRef } from 'react';
-import anime from 'animejs';
+import React, { useEffect, useState, useRef } from 'react';
 import { Users, Briefcase, Star, HeadphonesIcon } from 'lucide-react';
+
+const StatCounter = ({ endVal, suffix, isVisible }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        if (!isVisible) return;
+        
+        let startTimestamp = null;
+        const duration = 1500; // 1.5 seconds
+
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            setCount(Math.floor(progress * endVal));
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+
+        window.requestAnimationFrame(step);
+    }, [isVisible, endVal]);
+
+    return (
+        <span>
+            {count.toLocaleString('id-ID')}
+            {suffix}
+        </span>
+    );
+};
 
 const Statistics = () => {
     const sectionRef = useRef(null);
-    const countersRef = useRef([]);
-    const hasAnimated = useRef(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     const stats = [
         {
@@ -49,45 +76,8 @@ const Statistics = () => {
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !hasAnimated.current) {
-                    hasAnimated.current = true;
-                    
-                    // Header animation
-                    anime({
-                        targets: '.stat-header',
-                        opacity: [0, 1],
-                        translateY: [20, 0],
-                        duration: 800,
-                        easing: 'easeOutExpo'
-                    });
-
-                    // Cards animation
-                    anime({
-                        targets: '.stat-card',
-                        opacity: [0, 1],
-                        translateY: [30, 0],
-                        scale: [0.95, 1],
-                        duration: 800,
-                        delay: anime.stagger(150),
-                        easing: 'easeOutExpo'
-                    });
-
-                    // Counter animation
-                    countersRef.current.forEach((counterObj) => {
-                        anime({
-                            targets: counterObj,
-                            val: counterObj.endVal,
-                            round: 1,
-                            duration: 2000,
-                            easing: 'easeOutExpo',
-                            update: function() {
-                                if (counterObj.el) {
-                                    counterObj.el.innerHTML = counterObj.val.toLocaleString('id-ID') + counterObj.suffix;
-                                }
-                            }
-                        });
-                    });
-
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
                     observer.unobserve(entry.target);
                 }
             });
@@ -100,24 +90,18 @@ const Statistics = () => {
         return () => observer.disconnect();
     }, []);
 
-    // Prepare counter objects for animejs
-    useEffect(() => {
-        countersRef.current = stats.map(stat => ({
-            val: 0,
-            endVal: stat.value,
-            suffix: stat.suffix,
-            el: null
-        }));
-    }, []);
-
     return (
-        <section ref={sectionRef} className="py-24 relative overflow-hidden bg-[#050505]">
+        <section ref={sectionRef} className="py-24 relative overflow-hidden bg-[#050505] transition-colors duration-500">
             {/* Subtle section background */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]" />
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 {/* Section header */}
-                <div className="stat-header opacity-0 text-center mb-16">
+                <div 
+                    className={`text-center mb-16 transition-all duration-800 ease-out transform ${
+                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    }`}
+                >
                     <span className="section-label mb-4 inline-block bg-white/5 border border-white/10 text-white">Angka Bicara</span>
                     <h2 className="text-3xl md:text-4xl font-bold text-white mt-4">
                         Dipercaya Ribuan Pengguna
@@ -128,10 +112,15 @@ const Statistics = () => {
                     {stats.map((stat, index) => (
                         <div
                             key={stat.id}
-                            className="stat-card opacity-0 bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-3xl p-8 flex flex-col items-center justify-center text-center group cursor-default relative overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:bg-white/[0.05] hover:border-white/[0.12] hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+                            className={`bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-3xl p-8 flex flex-col items-center justify-center text-center group cursor-default relative overflow-hidden transition-all duration-700 ease-out transform hover:-translate-y-2 hover:bg-white/[0.05] hover:border-white/[0.12] hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] ${
+                                isVisible 
+                                    ? 'opacity-100 translate-y-0 scale-100' 
+                                    : 'opacity-0 translate-y-8 scale-95'
+                            }`}
+                            style={{ transitionDelay: `${index * 150}ms` }}
                         >
                             {/* Glow behind icon */}
-                            <div className={`absolute top-8 w-24 h-24 rounded-full bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500`} />
+                            <div className={`absolute top-8 w-24 h-24 rounded-full bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-25 blur-2xl transition-opacity duration-500`} />
 
                             {/* Icon */}
                             <div className={`relative w-14 h-14 mb-6 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg ${stat.shadow} group-hover:scale-110 transition-transform duration-300 z-10`}>
@@ -139,15 +128,8 @@ const Statistics = () => {
                             </div>
 
                             {/* Number */}
-                            <div 
-                                className="text-4xl md:text-5xl font-black text-white mb-2 tabular-nums z-10"
-                                ref={el => {
-                                    if (countersRef.current[index]) {
-                                        countersRef.current[index].el = el;
-                                    }
-                                }}
-                            >
-                                0{stat.suffix}
+                            <div className="text-4xl md:text-5xl font-black text-white mb-2 tabular-nums z-10">
+                                <StatCounter endVal={stat.value} suffix={stat.suffix} isVisible={isVisible} />
                             </div>
 
                             {/* Label */}

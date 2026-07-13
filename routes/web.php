@@ -67,6 +67,7 @@ Route::middleware('servizz.auth')->group(function () {
     // Pesanan - Semua Role
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/',             [OrderController::class, 'index'])->name('index');
+        Route::get('/export',       [OrderController::class, 'export'])->name('export');
         Route::get('/{id}',         [OrderController::class, 'show'])->name('show');
         Route::post('/{id}/assign', [OrderController::class, 'assign'])
             ->name('assign')

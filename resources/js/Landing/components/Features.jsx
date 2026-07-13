@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import anime from 'animejs';
-import { LogIn, Zap, CreditCard, BellRing, Smartphone, LifeBuoy, ArrowRight } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { LogIn, Zap, CreditCard, BellRing, Smartphone, LifeBuoy } from 'lucide-react';
 import { cn } from '../utils';
 
 const Features = () => {
     const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
 
     const features = [
         {
@@ -67,25 +67,7 @@ const Features = () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    anime({
-                        targets: '.bento-card',
-                        opacity: [0, 1],
-                        translateY: [40, 0],
-                        scale: [0.95, 1],
-                        filter: ['blur(10px)', 'blur(0px)'],
-                        duration: 800,
-                        easing: 'easeOutExpo',
-                        delay: anime.stagger(100)
-                    });
-                    
-                    anime({
-                        targets: '.feature-header',
-                        opacity: [0, 1],
-                        translateY: [20, 0],
-                        duration: 800,
-                        easing: 'easeOutExpo'
-                    });
-
+                    setIsVisible(true);
                     observer.unobserve(entry.target);
                 }
             });
@@ -98,55 +80,26 @@ const Features = () => {
         return () => observer.disconnect();
     }, []);
 
-    // 3D Hover Effect
-    const handleMouseMove = (e, target) => {
-        const rect = target.getBoundingClientRect();
-        const x = e.clientX - rect.left; // x position within the element.
-        const y = e.clientY - rect.top;  // y position within the element.
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateX = ((y - centerY) / centerY) * -5;
-        const rotateY = ((x - centerX) / centerX) * 5;
-
-        target.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        target.style.transition = 'none';
-        
-        // Glow effect following cursor
-        const glow = target.querySelector('.bento-glow');
-        if (glow) {
-            glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.1) 0%, transparent 50%)`;
-        }
-    };
-
-    const handleMouseLeave = (target) => {
-        target.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        target.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
-        
-        const glow = target.querySelector('.bento-glow');
-        if (glow) {
-            glow.style.background = `transparent`;
-        }
-    };
-
     return (
-        <section id="features" ref={sectionRef} className="py-28 relative overflow-hidden">
+        <section id="features" ref={sectionRef} className="py-28 relative overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors duration-500">
             {/* Background decoration */}
-            <div className="absolute inset-0 bg-[#0a0a0a] z-[-2]" />
-            <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#F53003]/10 blur-[100px] rounded-full z-[-1] pointer-events-none" />
+            <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#F53003]/5 dark:bg-[#F53003]/8 blur-[100px] rounded-full pointer-events-none" />
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 {/* Section header */}
-                <div className="feature-header opacity-0 text-center max-w-3xl mx-auto mb-20">
+                <div 
+                    className={`text-center max-w-3xl mx-auto mb-20 transition-all duration-800 ease-out transform ${
+                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    }`}
+                >
                     <div className="mb-5">
                         <span className="section-label bg-white/5 border border-white/10 text-[#F53003]">Fitur Utama</span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-[1.1]">
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-5 leading-[1.1]">
                         Sistem Pintar untuk{' '}
                         <span className="text-gradient-primary">Kebutuhan Anda</span>
                     </h2>
-                    <p className="text-lg text-gray-400 leading-relaxed">
+                    <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
                         Servizz telah diperbarui dengan berbagai fungsionalitas sistem terkini untuk pengalaman memesan jasa yang aman, transparan, dan dapat diandalkan.
                     </p>
                 </div>
@@ -157,29 +110,27 @@ const Features = () => {
                         <div
                             key={index}
                             className={cn(
-                                "bento-card opacity-0 group relative overflow-hidden rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] p-6 cursor-default transition-all duration-300",
-                                feature.span
+                                "group relative overflow-hidden rounded-3xl bg-gray-50 dark:bg-white/[0.02] border border-gray-200/50 dark:border-white/[0.08] p-6 cursor-default transition-all duration-700 ease-out transform hover:-translate-y-1.5 hover:bg-gray-100/50 dark:hover:bg-white/[0.04] hover:border-[#F53003]/30 dark:hover:border-[#F53003]/30 hover:shadow-[0_20px_50px_-12px_rgba(245,48,3,0.12)]",
+                                feature.span,
+                                isVisible 
+                                    ? 'opacity-100 translate-y-0 scale-100' 
+                                    : 'opacity-0 translate-y-8 scale-95'
                             )}
-                            onMouseMove={(e) => handleMouseMove(e, e.currentTarget)}
-                            onMouseLeave={(e) => handleMouseLeave(e.currentTarget)}
+                            style={{ transitionDelay: `${index * 100}ms` }}
                         >
-                            <div className="bento-glow absolute inset-0 pointer-events-none transition-all duration-300" />
-                            
-                            {/* Inner border glow on hover */}
-                            <div className="absolute inset-0 rounded-3xl p-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-20`} />
-                            </div>
+                            {/* Hover light glow effect */}
+                            <div className="absolute -inset-24 bg-[radial-gradient(circle_at_center,rgba(245,48,3,0.06)_0%,transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                             <div className="relative z-10 flex flex-col h-full justify-between">
-                                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-4 shadow-lg ${feature.shadow}`}>
+                                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-4 shadow-lg ${feature.shadow} group-hover:scale-105 transition-transform duration-300`}>
                                     {feature.icon}
                                 </div>
                                 
                                 <div>
-                                    <h3 className="text-xl font-bold text-white mb-2 leading-tight">
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight">
                                         {feature.title}
                                     </h3>
-                                    <p className="text-gray-400 text-sm leading-relaxed">
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                                         {feature.description}
                                     </p>
                                 </div>

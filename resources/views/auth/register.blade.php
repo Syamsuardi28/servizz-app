@@ -48,7 +48,7 @@
                 </div>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required
                     class="block w-full pl-11 pr-4 py-3 bg-[#1f1f1e] border border-[#3E3E3A] rounded-xl text-[#EDEDEC] text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all shadow-sm" 
-                    placeholder="Contoh: john@example.com">
+                    placeholder="Masukkan email">
             </div>
         </div>
 

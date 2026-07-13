@@ -24,6 +24,9 @@
             </div>
         </div>
 
+        <!-- Download/Export Button -->
+        <x-button variant="secondary" icon="download" onclick="exportData()">Unduh Data</x-button>
+
         @if(session('servizz_user.role') === 'Pelanggan')
             <x-button variant="primary" icon="plus" onclick="window.location.href='{{ route('services.index') }}'">Buat Pesanan</x-button>
         @else
@@ -128,6 +131,13 @@
 function updateFilters() {
     const status = document.getElementById('statusFilter').value;
     let url = '{{ route("orders.index") }}?';
+    if(status) url += 'status=' + encodeURIComponent(status);
+    window.location.href = url;
+}
+
+function exportData() {
+    const status = document.getElementById('statusFilter').value;
+    let url = '{{ route("orders.export") }}?';
     if(status) url += 'status=' + encodeURIComponent(status);
     window.location.href = url;
 }
