@@ -24,6 +24,26 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
+        // Auto-run migrations on SQLite if tables don't exist (critical for Vercel ephemeral /tmp database)
+        try {
+            if (config('database.default') === 'sqlite') {
+                $dbPath = config('database.connections.sqlite.database');
+                if ($dbPath && $dbPath !== ':memory:' && !file_exists($dbPath)) {
+                    $dir = dirname($dbPath);
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0755, true);
+                    }
+                    touch($dbPath);
+                }
+                
+                if (!\Illuminate\Support\Facades\Schema::hasTable('order_progress')) {
+                    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                }
+            }
+        } catch (\Throwable $e) {
+            error_log('[AppServiceProvider AutoMigration] Failed: ' . $e->getMessage());
+        }
+
         View::composer('layouts.app', function ($view) {
             $notifications = [];
             $unreadCount = 0;
