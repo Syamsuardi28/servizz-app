@@ -40,23 +40,22 @@
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto overscroll-none p-4 sm:p-6 lg:p-8 bg-background dark:bg-[#0a0a0a]">
                 
-                <!-- Flash Messages -->
+                <!-- Flash Messages & Validation Errors -->
                 @if(session('flash_message'))
                     @php $type = session('flash_type') === 'error' ? 'danger' : 'success'; @endphp
                     <x-alert :type="$type" :message="session('flash_message')" />
                 @endif
 
+                @if(session('error'))
+                    <x-alert type="danger" :message="session('error')" />
+                @endif
+                
+                @if(session('success'))
+                    <x-alert type="success" :message="session('success')" />
+                @endif
+
                 @if($errors->any())
-                    <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
-                        <div class="flex gap-3">
-                            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
-                            <ul class="list-disc list-inside">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
+                    <x-alert type="danger" :messages="$errors->all()" />
                 @endif
 
                 <div class="max-w-7xl mx-auto space-y-6">

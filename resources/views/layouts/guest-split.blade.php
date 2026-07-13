@@ -178,16 +178,8 @@
 
             <!-- Content Over 3D -->
             <div class="relative z-20 flex-1 flex flex-col">
-                <!-- Top Wrapper (Back Button + Logo) -->
-                <div class="gsap-left-item mb-12 flex flex-col items-start gap-8">
-                    <!-- Back Button -->
-                    <a href="{{ url('/') }}" class="inline-flex items-center gap-3 text-sm font-semibold text-gray-400 hover:text-white transition-all group backdrop-blur-md bg-white/5 p-2 pr-5 rounded-full border border-white/10 hover:border-white/20 shadow-lg w-max">
-                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-primary-500 group-hover:text-white transition-colors">
-                            <i data-lucide="arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-1"></i>
-                        </div>
-                        Kembali
-                    </a>
-
+                <!-- Top Wrapper (Back Button & Logo aligned horizontally) -->
+                <div class="gsap-left-item mb-12 flex flex-row justify-between items-center w-full">
                     <!-- Logo -->
                     <a href="{{ url('/') }}" class="inline-flex items-center gap-3 group/logo cursor-pointer w-max">
                         <div class="relative flex items-center justify-center w-11 h-11 text-white rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 font-bold text-xl shadow-lg shadow-primary-500/30 overflow-hidden">
@@ -196,26 +188,19 @@
                         </div>
                         <span class="text-2xl font-extrabold tracking-tight text-white font-['Plus_Jakarta_Sans']">Servizz.io</span>
                     </a>
+
+                    <!-- Back Button -->
+                    <a href="{{ url('/') }}" class="inline-flex items-center gap-3 text-sm font-semibold text-gray-400 hover:text-white transition-all group backdrop-blur-md bg-white/5 p-2 pr-5 rounded-full border border-white/10 hover:border-white/20 shadow-lg w-max">
+                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-1"></i>
+                        </div>
+                        Kembali
+                    </a>
                 </div>
 
                 <!-- Spacer -->
                 <div class="flex-1"></div>
 
-                <!-- Text Content -->
-                <div class="max-w-md">
-                    <div class="gsap-left-item inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-primary-400 font-medium text-xs mb-6 backdrop-blur-sm">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                        Next-Gen Service Management
-                    </div>
-                    
-                    <h1 class="gsap-left-item text-4xl lg:text-5xl font-extrabold text-white leading-[1.15] mb-5 font-['Plus_Jakarta_Sans'] tracking-tight">
-                        Kelola Bisnis Jasa <br> Lebih <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-amber-300">Eksklusif</span>
-                    </h1>
-                    
-                    <p class="gsap-left-item text-gray-400 text-base leading-relaxed font-['Inter']">
-                        Tingkatkan produktivitas dan skala bisnis Anda dengan platform manajemen modern yang dirancang untuk performa dan keamanan enterprise.
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -245,28 +230,15 @@
                     @endif
 
                     @if(session('error'))
-                        <div class="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium backdrop-blur-md flex gap-3 items-start shadow-[0_4px_16px_rgba(239,68,68,0.1)]">
-                            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                            <div>{{ session('error') }}</div>
-                        </div>
+                        <x-alert type="danger" :message="session('error')" />
                     @endif
                     
                     @if(session('success'))
-                        <div class="mb-6 p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium backdrop-blur-md flex gap-3 items-start shadow-[0_4px_16px_rgba(34,197,94,0.1)]">
-                            <i data-lucide="check-circle-2" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                            <div>{{ session('success') }}</div>
-                        </div>
+                        <x-alert type="success" :message="session('success')" />
                     @endif
 
                     @if($errors->any())
-                        <div class="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium backdrop-blur-md flex gap-3 items-start shadow-[0_4px_16px_rgba(239,68,68,0.1)]">
-                            <i data-lucide="alert-triangle" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                            <ul class="list-disc list-inside space-y-1">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <x-alert type="danger" :messages="$errors->all()" />
                     @endif
                 </div>
 
